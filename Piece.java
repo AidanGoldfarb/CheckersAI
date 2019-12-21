@@ -1,7 +1,8 @@
+import java.util.ArrayList;
 public class Piece{
     private String side;
     private int x_pos, y_pos;
-    private int [][] moves; 
+    private ArrayList<Point> legalMoves; 
 
     public Piece(String side){ //piece in initial position
         this.side = side;
@@ -11,6 +12,7 @@ public class Piece{
         this.side = side;
         this.x_pos = x_pos;
         this.y_pos = y_pos;
+        legalMoves = new ArrayList<Point>();
     }
 
     @Override
@@ -21,7 +23,31 @@ public class Piece{
             return "O";
     }
 
+    public ArrayList<Point> getMoves(){
+        return legalMoves;
+    }
+
+    public void addLegalMove(Point p){
+        legalMoves.add(p);
+    } 
+
     public String getSide(){
         return this.side;
+    }
+
+    public void setX(int x){
+        x_pos = x;
+    }
+    
+    public void setY(int y){
+        y_pos = y;
+    }
+
+    public int getX(){
+        return x_pos;
+    }
+
+    public int getY(){
+        return y_pos;
     }
 }
