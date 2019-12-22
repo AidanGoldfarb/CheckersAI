@@ -3,7 +3,7 @@ public class Start {
     public static void main(String [] args){
         Board b1 = new Board(4);
         loadInitialBoard(b1, 4);
-        System.out.println(b1.isMoveLegal(b1.getPiece(new Point(3,0)), new Point(2,1)));
+        //b1.move("D4-C3", b1.getWhitePosList(), b1.getBlackPosList());
     }
 
     public static void loadInitialBoard(Board b, int dim){
@@ -19,7 +19,9 @@ public class Start {
             wPosList.add(w2);
             bPosList.add(b1);
             bPosList.add(b2);
-            b.drawBoard(wPosList, bPosList);
+            b.setWhitePosList(wPosList);
+            b.setBlackPosList(bPosList);
+            b.drawBoard();
         }
     }
 

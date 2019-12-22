@@ -50,4 +50,8 @@ public class Piece{
     public int getY(){
         return y_pos;
     }
+
+    public Point getPoint(){
+        return new Point(x_pos, y_pos);
+    }
 }
