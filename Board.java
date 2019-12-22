@@ -198,18 +198,19 @@ public Board(int size){
         Point p2 = cordToPoint(parts[1]);
         if(getPiece(p1) != null && isMoveLegal(getPiece(p1), p2)){ //there is a piece on p1 and it can move to p2
             //put getpiece(p1) to p2, set p1 to null
-            Point p3 = getPiece(p1).getPoint();
+            //Point p3 = getPiece(p1).getPoint();
             if(getPiece(p1).getSide().equals(("white"))){
-                whitePosList.remove(p3);
+                //whitePosList.remove(p1); //p3
+                removePointFromList(p1,whitePosList);
                 getPiece(p1).setX(p2.getX());
                 getPiece(p1).setY(p2.getY());
                 whitePosList.add(p2);
             }
             else{
-                whitePosList.remove(p3);
+                blackPosList.remove(p1); //p3
                 getPiece(p1).setX(p2.getX());
                 getPiece(p1).setY(p2.getY());
-                whitePosList.add(p2);
+                blackPosList.add(p2);
             }
             
 
@@ -218,6 +219,21 @@ public Board(int size){
             System.out.println("Invalid move");
         }
     }
+    /*
+     * Removes a point from list of points. list.remove(point) was not working 
+     */
+    public boolean removePointFromList(Point p, ArrayList<Point> list){
+        int x = p.getX();
+        int y = p.getY();
+        for(int i = 0; i<list.size(); i++){
+            if(list.get(i).getX() == x && list.get(i).getY() == y){
+                list.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
     /*
      *Give a string of a coordinate (e.g. B2), returns a point with the appropriate values 
      */

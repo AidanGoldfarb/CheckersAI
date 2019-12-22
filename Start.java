@@ -1,9 +1,19 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 public class Start {
     public static void main(String [] args){
+        Scanner sc = new Scanner(System.in);
         Board b1 = new Board(4);
         loadInitialBoard(b1, 4);
-        //b1.move("D4-C3", b1.getWhitePosList(), b1.getBlackPosList());
+        String m = "";
+        while(!m.equals("quit")){
+            System.out.print("Enter a move: ");
+            m = sc.next();
+            if(m.equals("quit")) System.exit(0);
+            b1.move(m, b1.getWhitePosList(), b1.getBlackPosList());
+            System.out.println("\n");
+            b1.drawBoard();
+        }
     }
 
     public static void loadInitialBoard(Board b, int dim){

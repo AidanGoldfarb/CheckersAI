@@ -13,6 +13,11 @@ public class Point {
         this.y = y;
     }
 
+    @Override
+    public String toString(){
+        return "(" + this.x + "," + this.y + ")";
+    }
+
     /*
     checks if point is in a given list
     */
