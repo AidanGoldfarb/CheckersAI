@@ -1,3 +1,3 @@
 # CheckersAI
-Playable checkers game
+Playable checkers game.
 AI coming soon...
