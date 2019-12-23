@@ -71,10 +71,33 @@ public Board(int size){
         return true;
     }
 
+    public boolean canCapture(Piece piece, Point point){
+        int pieceX = piece.getX();
+        int pieceY = piece.getY();
+        String side = piece.getSide();
+        int potX = point.getX();
+        int potY = point.getY();
+        if(side.equals("white")){//WHITE
+            if(pieceX <= 2){
+                return false;
+            }
+            else if(pieceY == 0){
+                //just check (x+1,1) and (x+2,2)
+
+            }
+        }
+        else{//BLACK
+            if(pieceX >= DIM-2){
+                return false;
+            }
+        }
+    }
+
     /*
      *Given a piece and a potential point, returns true if it is legal for the given piece to move to the given point
      */
     public boolean isMoveLegal(Piece piece, Point point){ 
+        boolean canCapture = canCapture(piece, point);
         int pieceX = piece.getX();
         int pieceY = piece.getY();
         String side = piece.getSide();
@@ -207,7 +230,7 @@ public Board(int size){
                 whitePosList.add(p2);
             }
             else{
-                blackPosList.remove(p1); //p3
+                removePointFromList(p1,blackPosList); //p3
                 getPiece(p1).setX(p2.getX());
                 getPiece(p1).setY(p2.getY());
                 blackPosList.add(p2);
