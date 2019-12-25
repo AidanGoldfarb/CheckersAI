@@ -2,7 +2,8 @@ import java.util.ArrayList;
 public class Piece{
     private String side;
     private int x_pos, y_pos;
-    private ArrayList<Point> legalMoves; 
+    private ArrayList<Point> legalMoves;
+    private boolean canCapture;
 
     public Piece(String side){ //piece in initial position
         this.side = side;
@@ -13,6 +14,7 @@ public class Piece{
         this.x_pos = x_pos;
         this.y_pos = y_pos;
         legalMoves = new ArrayList<Point>();
+        canCapture = false;
     }
 
     @Override
@@ -53,5 +55,12 @@ public class Piece{
 
     public Point getPoint(){
         return new Point(x_pos, y_pos);
+    }
+
+    public boolean getCanCapture() {
+        return this.canCapture;
+    }
+    public void setCanCapture(boolean canCapture) {
+        this.canCapture = canCapture;
     }
 }

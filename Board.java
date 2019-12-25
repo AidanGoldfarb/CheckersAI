@@ -65,39 +65,99 @@ public Board(int size){
             System.out.println("OUT OF RANGE");
             return false;
         }
-        if(board[x][y] == null){
-            return false;
+        if(board[x][y] != null){
+            return true;
         }
-        return true;
+        return false;
     }
 
-    public boolean canCapture(Piece piece, Point point){
+    /*
+     *Given a piece, says whether it has any legal captures
+        may return valid capture point in future... 
+     */
+    public Point canCapture(Piece piece, Point point){
+        Point p;
         int pieceX = piece.getX();
         int pieceY = piece.getY();
         String side = piece.getSide();
-        int potX = point.getX();
-        int potY = point.getY();
+        // int potX = point.getX();
+        // int potY = point.getY();
         if(side.equals("white")){//WHITE
-            if(pieceX <= 2){
-                return false;
+            if(pieceX <= 1){
+                return null;
             }
             else if(pieceY == 0){
-                //just check (x+1,1) and (x+2,2)
-
+                //just check (x-1,1) and (x-2,2)
+                if(isOccupied(pieceX-1, pieceY+1) && !isOccupied(pieceX-2, pieceY+2)){
+                    removePointFromList(new Point(pieceX-1, pieceY+1) ,blackPosList); //remove jumped piece
+                    return p = new Point(pieceX-2, pieceY+2);
+                }
+            }
+            else if(pieceY == DIM-1){
+                 //just check (x-1,DIM-2) and (x-2,DIM-3)
+                 if(isOccupied(pieceX-1, pieceY-1) && !isOccupied(pieceX-2, pieceY-2)){
+                    removePointFromList(new Point(pieceX-1, pieceY-1) ,blackPosList); //remove jumped piece
+                    return p = new Point(pieceX-2, pieceY-2);
+                 }
+            }
+            else{
+                //check both directions
+                if((isOccupied(pieceX-1, pieceY+1) && !isOccupied(pieceX-2, pieceY+2)) ){
+                    removePointFromList(new Point(pieceX-1, pieceY+1) ,blackPosList); //remove jumped piece
+                    return p = new Point(pieceX-2, pieceY+2);
+                }
+                else if((isOccupied(pieceX-1, pieceY-1) && !isOccupied(pieceX-2, pieceY-2))){
+                    removePointFromList(new Point(pieceX-1, pieceY-1) ,blackPosList); //remove jumped piece
+                    return p = new Point(pieceX-2, pieceY-2);
+                }
+                else{
+                    return null;
+                }
             }
         }
         else{//BLACK
             if(pieceX >= DIM-2){
-                return false;
+                return null;
+            }
+            else if(pieceY == 0){
+                if(isOccupied(pieceX+1, pieceY+1) && !isOccupied(pieceX+2, pieceY+2)){
+                    removePointFromList(new Point(pieceX+1, pieceY+1) ,whitePosList); //remove jumped piece
+                    return new Point(pieceX+2, pieceY+2);
+                }
+            }
+            else if(pieceY == DIM-1){
+                // System.out.println(piece.getX() + "," + piece.getY());
+                // System.out.println(isOccupied(pieceX+1, pieceY-1) + "  " + !isOccupied(pieceX+2, pieceY-2)); //true false, should be true true
+                // System.out.println(whitePosList);
+                // System.out.println("is Occupied: " + isOccupied(2,1));
+                if(isOccupied(pieceX+1, pieceY-1) && !isOccupied(pieceX+2, pieceY-2)){
+                    removePointFromList(new Point(pieceX+1, pieceY-1) ,whitePosList); //remove jumped piece
+                    return new Point(pieceX+2, pieceY-2);
+                 }
+            }
+            else{
+                if((isOccupied(pieceX+1, pieceY+1) && !isOccupied(pieceX+2, pieceY+2)) ){
+                    removePointFromList(new Point(pieceX+1, pieceY+1) ,whitePosList); //remove jumped piece
+                    return new Point(pieceX+2, pieceY+2);
+                }
+                else if((isOccupied(pieceX+1, pieceY-1) && !isOccupied(pieceX+2, pieceY-2))){
+                    removePointFromList(new Point(pieceX+1, pieceY-1) ,whitePosList); //remove jumped piece
+                    return new Point(pieceX+2, pieceY-2);
+                }
+                else{
+                    return null;
+                }
             }
         }
+        System.out.println("failed at 2");
+        return null;
     }
 
     /*
      *Given a piece and a potential point, returns true if it is legal for the given piece to move to the given point
      */
     public boolean isMoveLegal(Piece piece, Point point){ 
-        boolean canCapture = canCapture(piece, point);
+        //boolean canCapture = canCapture(piece, point);
         int pieceX = piece.getX();
         int pieceY = piece.getY();
         String side = piece.getSide();
@@ -200,7 +260,7 @@ public Board(int size){
     */
     public Piece getPiece(Point p){
         if(board[p.getX()][p.getY()] == null){
-            System.out.println("returning null");
+            System.out.println("returning null in getpiece on point: " + p);
             return null;
         }
         else{
@@ -212,36 +272,77 @@ public Board(int size){
      *Takes string as parameter. (e.g. Dc2) and updates board to move piece from D rank to c2 (2,1), if legal
      */
     public void move(String str, ArrayList<Point> wPosList, ArrayList<Point> bPosList){
-        String [] parts = str.split("-"); 
-        if(parts.length != 2){
-            System.out.println("ERROR(move) | USAGE");
-            System.exit(0);
-        }
-        Point p1 = cordToPoint(parts[0]);
-        Point p2 = cordToPoint(parts[1]);
-        if(getPiece(p1) != null && isMoveLegal(getPiece(p1), p2)){ //there is a piece on p1 and it can move to p2
-            //put getpiece(p1) to p2, set p1 to null
-            //Point p3 = getPiece(p1).getPoint();
-            if(getPiece(p1).getSide().equals(("white"))){
-                //whitePosList.remove(p1); //p3
-                removePointFromList(p1,whitePosList);
-                getPiece(p1).setX(p2.getX());
-                getPiece(p1).setY(p2.getY());
-                whitePosList.add(p2);
+        if(str.contains("-")){//TODO reset board to null
+            String [] parts = str.split("-"); 
+            if(parts.length != 2){
+                System.out.println("ERROR(move) | USAGE");
+                System.exit(0);
+            }
+            Point p1 = cordToPoint(parts[0]);
+            Point p2 = cordToPoint(parts[1]);
+            if(getPiece(p1) != null && isMoveLegal(getPiece(p1), p2)){ //there is a piece on p1 and it can move to p2
+                //put getpiece(p1) to p2, set p1 to null
+                //Point p3 = getPiece(p1).getPoint();
+                if(getPiece(p1).getSide().equals(("white"))){
+                    //whitePosList.remove(p1); //p3
+                    removePointFromList(p1,whitePosList);
+                    getPiece(p1).setX(p2.getX());
+                    getPiece(p1).setY(p2.getY());
+                    whitePosList.add(p2);
+                }
+                else{
+                    //board[p1.getX()][p1.getY()] = null;
+                    removePointFromList(p1,blackPosList); //p3
+                    getPiece(p1).setX(p2.getX());
+                    getPiece(p1).setY(p2.getY());
+                    blackPosList.add(p2);
+                }
+                
+
             }
             else{
-                removePointFromList(p1,blackPosList); //p3
-                getPiece(p1).setX(p2.getX());
-                getPiece(p1).setY(p2.getY());
-                blackPosList.add(p2);
+                System.out.println("Invalid move");
             }
-            
+            System.out.println("Nulling (" + p1.getX() + "," + p1.getY() + ")");
+            board[p1.getX()][p1.getY()] = null;
+        }
+        else if(str.contains("x")){
+            String [] parts = str.split("x"); 
+            if(parts.length != 2){
+                System.out.println("ERROR(move) | USAGE");
+                System.exit(0);
+            }
+            Point p1 = cordToPoint(parts[0]);
+            Point p2 = cordToPoint(parts[1]);
+            if(canCapture(getPiece(p1), p2) == null){
+                System.out.println("Invalid move can. Capture returned null");
+            }
+            else if(getPiece(p1) != null && canCapture(getPiece(p1), p2) != null){ 
+                if(getPiece(p1).getSide().equals(("white"))){
+                    Point p3 = canCapture(getPiece(p1), p2); //new point after jump
+                    board[p1.getX()][p1.getY()] = null;
+                    removePointFromList(p1,whitePosList);
+                    // getPiece(p1).setX(p3.getX());
+                    // getPiece(p1).setY(p3.getY());
+                    whitePosList.add(p3);
+                }
+                else{
+                    Point p3 = canCapture(getPiece(p1), p2); ; //new point after jump
+                    board[p1.getX()][p1.getY()] = null;
+                    removePointFromList(p1,blackPosList); //p3
+                    //removePointFromList( ,whitePosList); //remove jumped piece
+                    // getPiece(p1).setX(p3.getX());
+                    // getPiece(p1).setY(p3.getY());
+                    blackPosList.add(p3);
+                }
 
         }
         else{
-            System.out.println("Invalid move");
+            System.out.println("Invalid move"); //failing here
+            System.exit(0);
         }
     }
+}
     /*
      * Removes a point from list of points. list.remove(point) was not working 
      */
@@ -283,5 +384,11 @@ public Board(int size){
     }
     public void setBlackPosList(ArrayList<Point> blackPosList) {
         this.blackPosList = blackPosList;
+    }
+    public Piece[][] getBoard(){
+        return board;
+    }
+    public void setBoard(Piece[][] board){
+        this.board = board;
     }
 }
