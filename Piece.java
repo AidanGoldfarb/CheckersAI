@@ -2,7 +2,6 @@ import java.util.ArrayList;
 public class Piece{
     private String side;
     private int x_pos, y_pos;
-    private ArrayList<Point> legalMoves;
     private boolean canCapture;
 
     public Piece(String side){ //piece in initial position
@@ -13,7 +12,6 @@ public class Piece{
         this.side = side;
         this.x_pos = x_pos;
         this.y_pos = y_pos;
-        legalMoves = new ArrayList<Point>();
         canCapture = false;
     }
 
@@ -24,14 +22,6 @@ public class Piece{
         else 
             return "O";
     }
-
-    public ArrayList<Point> getMoves(){
-        return legalMoves;
-    }
-
-    public void addLegalMove(Point p){
-        legalMoves.add(p);
-    } 
 
     public String getSide(){
         return this.side;

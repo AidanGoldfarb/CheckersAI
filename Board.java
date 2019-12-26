@@ -57,6 +57,51 @@ public Board(int size){
             System.out.println();
         }
     }
+
+    /*
+    assigns correct values without printing anything
+    */
+    public void silentDrawBoard(){
+        int x = 0, y = 0;
+        for(int i = 0; i<=2*DIM; i++){
+            for(int j = 0; j<=2*DIM; j++){
+                if(i%2==0 && j%2==0){
+                    //System.out.print("+");
+                }
+                else if(i%2==0){
+                    //System.out.print("----");
+                }
+                else if(i%2!=0 && j%2==0){
+                    //System.out.print("| ");
+                }
+                else{                   
+                    //place piece at 0,1
+                    x = (i-1)/2;
+                    y = (j-1)/2;
+                    Point pt = new Point(x,y);
+                    if(pt.isInList(whitePosList)){
+                        Piece p = new Piece("white", x, y);
+                        p.setX(x);
+                        p.setY(y);
+                        board[x][y] = p;
+                        //currentPieces.add(pt);
+                        //System.out.print(p + "  ");
+                    }else if(pt.isInList(blackPosList)){
+                        Piece p = new Piece("black", x, y);
+                        p.setX(x);
+                        p.setY(y);
+                        board[x][y] = p;
+                        //currentPieces.add(pt);
+                        //System.out.print(p + "  ");
+                    }else{
+                        //System.out.print("   ");
+                    }
+                }
+            }
+            
+            //System.out.println();
+        }
+    }
     /*
      * Returns true if the given x,y coordinates contain a piece
      */
@@ -73,9 +118,14 @@ public Board(int size){
 
     /*
      *Given a piece, says whether it has any legal captures
-        may return valid capture point in future... 
+         retursn valid capture point in future... 
      */
-    public Point canCapture(Piece piece, Point point){
+    public Point canCapture(Piece piece){
+        silentDrawBoard();
+        if(piece == null){
+            System.out.println("piece == null in canCapture");
+            System.exit(0);
+        }
         Point p;
         int pieceX = piece.getX();
         int pieceY = piece.getY();
@@ -272,7 +322,7 @@ public Board(int size){
      *Takes string as parameter. (e.g. Dc2) and updates board to move piece from D rank to c2 (2,1), if legal
      */
     public void move(String str, ArrayList<Point> wPosList, ArrayList<Point> bPosList){
-        if(str.contains("-")){//TODO reset board to null
+        if(str.contains("-")){
             String [] parts = str.split("-"); 
             if(parts.length != 2){
                 System.out.println("ERROR(move) | USAGE");
@@ -314,33 +364,48 @@ public Board(int size){
             }
             Point p1 = cordToPoint(parts[0]);
             Point p2 = cordToPoint(parts[1]);
-            if(canCapture(getPiece(p1), p2) == null){
+            boolean keepJumping = true;
+            if(canCapture(getPiece(p1)) == null){
                 System.out.println("Invalid move can. Capture returned null");
+                System.exit(0);
             }
-            else if(getPiece(p1) != null && canCapture(getPiece(p1), p2) != null){ 
-                if(getPiece(p1).getSide().equals(("white"))){
-                    Point p3 = canCapture(getPiece(p1), p2); //new point after jump
-                    board[p1.getX()][p1.getY()] = null;
-                    removePointFromList(p1,whitePosList);
-                    // getPiece(p1).setX(p3.getX());
-                    // getPiece(p1).setY(p3.getY());
-                    whitePosList.add(p3);
-                }
-                else{
-                    Point p3 = canCapture(getPiece(p1), p2); ; //new point after jump
-                    board[p1.getX()][p1.getY()] = null;
-                    removePointFromList(p1,blackPosList); //p3
-                    //removePointFromList( ,whitePosList); //remove jumped piece
-                    // getPiece(p1).setX(p3.getX());
-                    // getPiece(p1).setY(p3.getY());
-                    blackPosList.add(p3);
-                }
+            while(keepJumping
+                if(getPiece(p1) != null && canCapture(getPiece(p1)) != null){ 
+                        if(getPiece(p1).getSide().equals(("white"))){
+                            Point p3 = canCapture(getPiece(p1)); //new point after jump
+                            System.out.println(p3);
+                            board[p1.getX()][p1.getY()] = null;
+                            removePointFromList(p1,whitePosList);
+                            whitePosList.add(p3);
+                            silentDrawBoard();
+                            if(canCapture(getPiece(p3)) == null){
+                                keepJumping = false;
+                            }
+                            else{
+                                p1 = p3; //new start state is old last state
+                            }
+                        }
+                        else{
+                            Point p3 = canCapture(getPiece(p1)); //new point after jump
+                            System.out.println(p3);
+                            board[p1.getX()][p1.getY()] = null;
+                            removePointFromList(p1,blackPosList); //p3
+                            blackPosList.add(p3);
+                            silentDrawBoard();
+                            if(canCapture(getPiece(p3)) == null){
+                                keepJumping = false;
+                            }
+                            else{
+                                p1 = p3; //new start state is old last state
+                            }
+                        }
 
-        }
-        else{
-            System.out.println("Invalid move"); //failing here
-            System.exit(0);
-        }
+                }
+                        else{
+                            System.out.println("Invalid move"); //failing here
+                            System.exit(0);
+                        }
+            }
     }
 }
     /*
