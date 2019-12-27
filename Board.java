@@ -121,6 +121,7 @@ public Board(int size){
          retursn valid capture point in future... 
      */
     public Point canCapture(Piece piece){
+        //TODO add cancaptures clauses for king's
         silentDrawBoard();
         if(piece == null){
             System.out.println("piece == null in canCapture");
@@ -332,8 +333,10 @@ public Board(int size){
                 }
                 else if(pieceX == 0 && pieceY == DIM-1){
                     //just check i+1,j-1
+                    System.out.println("im here thats good");
                     int newX = pieceX+1;
                     int newY = pieceY-1;
+                    System.out.println(!isOccupied(newX, newY) + " " + (newX == potX && newY == potY));
                     if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
                         return true;
                     }
@@ -493,7 +496,6 @@ public Board(int size){
      *Takes string as parameter. (e.g. Dc2) and updates board to move piece from D rank to c2 (2,1), if legal
      */
     public void move(String str, ArrayList<Point> wPosList, ArrayList<Point> bPosList){
-        //TODO fix king promotion on capture
         if(str.contains("-")){
             String [] parts = str.split("-"); 
             if(parts.length != 2){
@@ -561,12 +563,20 @@ public Board(int size){
                             removePointFromList(p1,whitePosList);
                             whitePosList.add(p3);
                             silentDrawBoard();
+                            if(p3.getX() == 0){
+                                board[p3.getX()][p3.getY()].setIsKing(true);
+                                System.out.println("%move: Piece at " + p3 + " set to king");
+                                System.out.println("%move: Piece at " + p3 + " isKing: " + getPiece(p3).getIsKing());
+                            }
                             if(canCapture(getPiece(p3)) == null){
                                 keepJumping = false;
                             }
                             else{
                                 p1 = p3; //new start state is old last state
                             }
+                            System.out.println("Nulling (" + p1.getX() + "," + p1.getY() + ")" + "AND " + "Nulling (" + p2.getX() + "," + p2.getY() + ")");
+                            board[p1.getX()][p1.getY()] = null;
+                            board[p2.getX()][p2.getY()] = null;
                         }
                         else{
                             Point p3 = canCapture(getPiece(p1)); //new point after jump
@@ -575,12 +585,20 @@ public Board(int size){
                             removePointFromList(p1,blackPosList); //p3
                             blackPosList.add(p3);
                             silentDrawBoard();
+                            if(p3.getX() == 0){
+                                board[p3.getX()][p3.getY()].setIsKing(true);
+                                System.out.println("%move: Piece at " + p3 + " set to king");
+                                System.out.println("%move: Piece at " + p3 + " isKing: " + getPiece(p3).getIsKing());
+                            }
                             if(canCapture(getPiece(p3)) == null){
                                 keepJumping = false;
                             }
                             else{
                                 p1 = p3; //new start state is old last state
                             }
+                            System.out.println("Nulling (" + p1.getX() + "," + p1.getY() + ")" + "AND " + "Nulling (" + p2.getX() + "," + p2.getY() + ")");
+                            board[p1.getX()][p1.getY()] = null;
+                            board[p2.getX()][p2.getY()] = null;
                         }
 
                 }

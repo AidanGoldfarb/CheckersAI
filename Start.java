@@ -9,15 +9,25 @@ public class Start {
         // b1.drawBoard();
         loadInitialBoard(b1, 4);
         String m = "";
-
+        int move = 1;
         while(!m.equals("quit")){
             System.out.print("Enter a move: ");
             m = sc.next();
             if(m.equals("quit")) System.exit(0);
-            //printBoardState(b1.getBoard());
-            b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
-            System.out.println("\n");
-            b1.drawBoard();
+            String pieceStr = m.substring(0,2);
+            //System.out.println("sub is " + pieceStr);
+            if(move%2 != 0 && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("white")){//white's turn
+                System.out.print("White's turn, try again: ");
+            }
+            else if(move%2 == 0 && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("white")){
+                System.out.print("Black's turn, try again: ");
+            }
+            else{
+                b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
+                move++;
+                System.out.println("\n");
+                b1.drawBoard();
+            }
         }
     }
 
@@ -80,8 +90,8 @@ public class Start {
         if(dim == 4){
             ArrayList<Point> wPosList = new ArrayList<Point>();
             ArrayList<Point> bPosList = new ArrayList<Point>();
-            Point w1 = new Point(1,2);
-            Point b1 = new Point(0,3);
+            Point w1 = new Point(2,1);
+            Point b1 = new Point(1,2);
 
             wPosList.add(w1);
             bPosList.add(b1);
