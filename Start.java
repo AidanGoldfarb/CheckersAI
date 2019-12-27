@@ -3,11 +3,11 @@ import java.util.Scanner;
 public class Start {
     public static void main(String [] args){
         Scanner sc = new Scanner(System.in);
-        Board b1 = new Board(8);
+        Board b1 = new Board(4);
         // loadTestBoard(b1, 4);
         // b1.move("A4xB3", b1.getWhitePosList(), b1.getBlackPosList());
         // b1.drawBoard();
-        loadInitialBoard(b1, 8);
+        loadInitialBoard(b1, 4);
         String m = "";
 
         while(!m.equals("quit")){

@@ -207,99 +207,270 @@ public Board(int size){
      *Given a piece and a potential point, returns true if it is legal for the given piece to move to the given point
      */
     public boolean isMoveLegal(Piece piece, Point point){ 
-        //boolean canCapture = canCapture(piece, point);
+        //silentDrawBoard();
+        
+        if(piece.getSide().equals("white")){
+            if(piece.getX() == 0)
+                piece.setIsKing(true);
+                board[piece.getX()][piece.getY()].setIsKing(true);
+        }
+        else{
+            if(piece.getX() == DIM-1)
+                piece.setIsKing(true);
+                board[piece.getX()][piece.getY()].setIsKing(true);
+        }
+        boolean isKing = piece.getIsKing();
+        System.out.println("Piece at " + piece.getX() + "," + piece.getY() + " isKing = " + isKing);
         int pieceX = piece.getX();
         int pieceY = piece.getY();
         String side = piece.getSide();
         int potX = point.getX();
         int potY = point.getY();
-        if(side.equals("white")){//WHITE
-            if(pieceX == 0 && pieceY == 0){
+        if(!isKing){ //regular piece
+            if(side.equals("white")){//WHITE
+                if(pieceX == 0 && pieceY == 0){
+                    return false;
+                }
+                else if(pieceX == 0){
                 return false;
-            }
-            else if(pieceX == 0){
-               return false;
-            }
-            else if(pieceY == 0){
-                 //just check j+1
-                 int newX = pieceX-1;
-                 int newY = pieceY+1;
-                 if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
-                     return true;
-                 }
-                 else{
-                     return false;
-                 }
-            }
-            else if(pieceY == DIM-1){
-                 //just check j-1
-                 int newX = pieceX-1;
-                 int newY = pieceY-1;
-                 if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
-                     return true;
-                 }
-                 else{
-                     return false;
-                 }
-            }
-            else{
-                //check i-1 and j-1 AND j+1
-                int newX = pieceX-1;
-                int newY1 = pieceY-1;
-                int newY2 = pieceY+1;
-                if(!isOccupied(newX, newY1) && (newX == potX && newY1 == potY)){
-                    return true;
                 }
-                else if(!isOccupied(newX, newY2) && (newX == potX && newY2 == potY)){
-                    return true;
+                else if(pieceY == 0){
+                    //just check j+1
+                    int newX = pieceX-1;
+                    int newY = pieceY+1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceY == DIM-1){
+                    //just check j-1
+                    int newX = pieceX-1;
+                    int newY = pieceY-1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
                 else{
-                    return false;
+                    //check i-1 and j-1 AND j+1
+                    int newX = pieceX-1;
+                    int newY1 = pieceY-1;
+                    int newY2 = pieceY+1;
+                    if(!isOccupied(newX, newY1) && (newX == potX && newY1 == potY)){
+                        return true;
+                    }
+                    else if(!isOccupied(newX, newY2) && (newX == potX && newY2 == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
             }
-        }
-        else{//BLACK
-            //check i+1 and j-1 AND j+1
-            if(pieceX == DIM-1 && pieceY == DIM-1){
-                return false;
-            }
-            else if(pieceX == DIM-1){
-                return false;
-            }
-            else if(pieceY == 0){
-                //just check j+1
-                int newX = pieceX+1;
-                int newY = pieceY+1;
-                if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
-                    return true;
+            else{//BLACK
+                //check i+1 and j-1 AND j+1
+                if(pieceX == DIM-1 && pieceY == DIM-1){
+                    return false;
+                }
+                else if(pieceX == DIM-1){
+                    return false;
+                }
+                else if(pieceY == 0){
+                    //just check j+1
+                    int newX = pieceX+1;
+                    int newY = pieceY+1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceY == DIM-1){
+                    //just check j-1
+                    int newX = pieceX+1;
+                    int newY = pieceY-1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
                 else{
-                    return false;
+                    int newX = pieceX+1;
+                    int newY1 = pieceY-1;
+                    int newY2 = pieceY+1;
+                    if(!isOccupied(newX, newY1) && (newX == potX && newY1 == potY)){
+                        return true;
+                    }
+                    else if(!isOccupied(newX, newY2) && (newX == potX && newY2 == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
             }
-            else if(pieceY == DIM-1){
-                //just check j-1
-                int newX = pieceX+1;
-                int newY = pieceY-1;
-                if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
-                    return true;
+        }else{//if piece is a king
+            if(side.equals("white")){//WHITE
+                if(pieceX == 0 && pieceY == 0){
+                    //just check 1,1
+                    int newX = pieceX+1;
+                    int newY = pieceY+1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceX == 0 && pieceY == DIM-1){
+                    //just check i+1,j-1
+                    int newX = pieceX+1;
+                    int newY = pieceY-1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceY == 0){
+                    //just check j+1 in both x directions
+                    int newX = pieceX-1;
+                    int newX2 = pieceX+1;
+                    int newY = pieceY+1;
+                    if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX2, newY) && (newX2 == potX && newY == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceY == DIM-1){
+                    //just check j-1
+                    int newX = pieceX-1;
+                    int newX2 = pieceX+1;
+                    int newY = pieceY-1;
+                    if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX2, newY) && (newX2 == potX && newY == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceX == 0){
+                    System.out.println("im here thats good");
+                    //check j+/-1
+                    int newX = pieceX+1;
+                    int newY = pieceY-1;
+                    int newY2 = pieceY+1;
+                    if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX, newY2) && (newX == potX && newY2 == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
                 else{
-                    return false;
+                    //check i-1 and j-1 AND j+1
+                    int newX1 = pieceX-1;
+                    int newX2 = pieceX+1;
+                    int newY1 = pieceY-1;
+                    int newY2 = pieceY+1;
+                    if((!isOccupied(newX1, newY1) && (newX1 == potX && newY1 == potY)) || ((!isOccupied(newX2, newY1) && (newX2 == potX && newY1 == potY)))){ //x1,y1
+                        return true;
+                    }
+                    else if((!isOccupied(newX1, newY2) && (newX1 == potX && newY2 == potY)) || ((!isOccupied(newX2, newY2) && (newX2 == potX && newY2 == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
             }
-            else{
-                int newX = pieceX+1;
-                int newY1 = pieceY-1;
-                int newY2 = pieceY+1;
-                if(!isOccupied(newX, newY1) && (newX == potX && newY1 == potY)){
-                    return true;
+            else{//BLACK
+                if(pieceX == DIM-1 && pieceY == DIM-1){
+                    //just check 1,1
+                    int newX = pieceX-1;
+                    int newY = pieceY-1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
-                else if(!isOccupied(newX, newY2) && (newX == potX && newY2 == potY)){
-                    return true;
+                else if(pieceX == DIM-1 && pieceY == 0){
+                    //just check i+1,j-1
+                    int newX = pieceX-1;
+                    int newY = pieceY+1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceY == DIM-1){
+                    //just check j+1 in both x directions
+                    int newX = pieceX+1;
+                    int newX2 = pieceX-1;
+                    int newY = pieceY-1;
+                    if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX2, newY) && (newX2 == potX && newY == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceY == 0){
+                    //just check j-1
+                    int newX = pieceX-1;
+                    int newX2 = pieceX+1;
+                    int newY = pieceY+1;
+                    if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX2, newY) && (newX2 == potX && newY == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceX == DIM-1){
+                    System.out.println("im here thats good");
+                    //check j+/-1
+                    int newX = pieceX-1;
+                    int newY = pieceY-1;
+                    int newY2 = pieceY+1;
+                    if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX, newY2) && (newX == potX && newY2 == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
                 else{
-                    return false;
+                    //check i-1 and j-1 AND j+1
+                    int newX1 = pieceX+1;
+                    int newX2 = pieceX-1;
+                    int newY1 = pieceY+1;
+                    int newY2 = pieceY-1;
+                    if((!isOccupied(newX1, newY1) && (newX1 == potX && newY1 == potY)) || ((!isOccupied(newX2, newY1) && (newX2 == potX && newY1 == potY)))){ //x1,y1
+                        return true;
+                    }
+                    else if((!isOccupied(newX1, newY2) && (newX1 == potX && newY2 == potY)) || ((!isOccupied(newX2, newY2) && (newX2 == potX && newY2 == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                
                 }
             }
         }
@@ -322,6 +493,7 @@ public Board(int size){
      *Takes string as parameter. (e.g. Dc2) and updates board to move piece from D rank to c2 (2,1), if legal
      */
     public void move(String str, ArrayList<Point> wPosList, ArrayList<Point> bPosList){
+        //TODO fix king promotion on capture
         if(str.contains("-")){
             String [] parts = str.split("-"); 
             if(parts.length != 2){
@@ -339,6 +511,12 @@ public Board(int size){
                     getPiece(p1).setX(p2.getX());
                     getPiece(p1).setY(p2.getY());
                     whitePosList.add(p2);
+                    silentDrawBoard();
+                    if(p2.getX() == 0){
+                        board[p2.getX()][p2.getY()].setIsKing(true);
+                        System.out.println("Piece at " + p2 + " set to king");
+                        System.out.println("Piece at " + p2 + " isKing: " + getPiece(p2).getIsKing());
+                    }
                 }
                 else{
                     //board[p1.getX()][p1.getY()] = null;
@@ -346,6 +524,11 @@ public Board(int size){
                     getPiece(p1).setX(p2.getX());
                     getPiece(p1).setY(p2.getY());
                     blackPosList.add(p2);
+                    silentDrawBoard();
+                    if(p2.getX() == DIM-1){
+                        board[p2.getX()][p2.getY()].setIsKing(true);
+                        System.out.println("Piece at " + p2 + " set to king");
+                    }
                 }
                 
 
@@ -369,7 +552,7 @@ public Board(int size){
                 System.out.println("Invalid move can. Capture returned null");
                 System.exit(0);
             }
-            while(keepJumping
+            while(keepJumping){
                 if(getPiece(p1) != null && canCapture(getPiece(p1)) != null){ 
                         if(getPiece(p1).getSide().equals(("white"))){
                             Point p3 = canCapture(getPiece(p1)); //new point after jump
