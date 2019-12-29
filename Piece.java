@@ -20,9 +20,9 @@ public class Piece{
     @Override
     public String toString(){
         if(this.side.equals("white") && !isKing)
-            return "X";
+            return "X ";
         else if (this.side.equals("black") && !isKing){ 
-            return "O";
+            return "O ";
         }
         else if(this.side.equals("white")){
             return "XX";

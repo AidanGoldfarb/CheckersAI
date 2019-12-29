@@ -7,7 +7,7 @@ public class Start {
         // loadTestBoard(b1, 4);
         // b1.move("A4xB3", b1.getWhitePosList(), b1.getBlackPosList());
         // b1.drawBoard();
-        loadInitialBoard(b1, 4);
+        loadTestBoard(b1, 4);
         String m = "";
         int move = 1;
         while(!m.equals("quit")){
@@ -90,11 +90,12 @@ public class Start {
         if(dim == 4){
             ArrayList<Point> wPosList = new ArrayList<Point>();
             ArrayList<Point> bPosList = new ArrayList<Point>();
-            Point w1 = new Point(2,1);
-            Point b1 = new Point(1,2);
-
+            Point w1 = new Point(1,2);
+            Point b1 = new Point(2,1);
+            //Point b2 = new Point(0,1);
             wPosList.add(w1);
             bPosList.add(b1);
+            //bPosList.add(b2);
             b.setWhitePosList(wPosList);
             b.setBlackPosList(bPosList);
             b.drawBoard();
