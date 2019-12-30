@@ -255,12 +255,13 @@ public Board(int size){
                     }
                 }
                 else if(pieceX == 0 && pieceY == DIM-1){//top right
+                    System.out.println("%canCapture: HERE");
                     int x1 = pieceX+1;
                     int y1 = pieceY-1;
                     int x2 = pieceX+2;
                     int y2 = pieceY-2;
                     if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
-                        removePointFromList(new Point(x1,y1) ,blackPosList); //removed jumped piece
+                        //removePointFromList(new Point(x1,y1) ,blackPosList); //removed jumped piece
                         return new Point(x2,y2);
                     }
                 }
@@ -358,7 +359,7 @@ public Board(int size){
                     int x4 = pieceX-2;
                     int y4 = pieceY+2;
                     if(isOccupied(x3, y3) && !isOccupied(x4, y4)){
-                        return new Point(x2,y2);
+                        return new Point(x4,y4);
                     }
 
                     //bottom left
@@ -367,7 +368,7 @@ public Board(int size){
                     int x6 = pieceX+2;
                     int y6 = pieceY-2;
                     if(isOccupied(x5, y5) && !isOccupied(x6, y6)){
-                        return new Point(x2,y2);
+                        return new Point(x6,y6);
                     }
 
                     //bottom right
@@ -376,24 +377,151 @@ public Board(int size){
                     int x8 = pieceX+2;
                     int y8 = pieceY+2;
                     if(isOccupied(x7, y7) && !isOccupied(x8, y8)){
-                        return new Point(x2,y2);
+                        return new Point(x8,y8);
                     }
                     return null;
                 }
             }
-            else{//BLACK KING
-                //top left
-                //top right
-                //bottom right
-                //bottom left
-                //top row
-                //bottom row
-                //left column
-                //right column
-                //else
+
+            else{//BLACK KING 
+                if(pieceX == 0 && pieceY == 0){//top left
+                    int x1 = pieceX+1;
+                    int y1 = pieceY+1;
+                    int x2 = pieceX+2;
+                    int y2 = pieceY+2;
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                        return new Point(x2,y2);
+                    }
+                }
+                else if(pieceX == 0 && pieceY == DIM-1){//top right
+                    System.out.println("%canCapture: HERE");
+                    int x1 = pieceX+1;
+                    int y1 = pieceY-1;
+                    int x2 = pieceX+2;
+                    int y2 = pieceY-2;
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                        //removePointFromList(new Point(x1,y1) ,blackPosList); //removed jumped piece
+                        return new Point(x2,y2);
+                    }
+                }
+                else if(pieceX == DIM-1 && pieceY == DIM-1){//bottom right
+                    int x1 = pieceX-1;
+                    int y1 = pieceY-1;
+                    int x2 = pieceX-2;
+                    int y2 = pieceY-2;
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                        return new Point(x2,y2);
+                    }
+                }
+                else if(pieceX == DIM-1 && pieceY == 0){//bottom left
+                    int x1 = pieceX-1;
+                    int y1 = pieceY+1;
+                    int x2 = pieceX-2;
+                    int y2 = pieceY+2;
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                        return new Point(x2,y2);
+                    }
+                }
+                else if(pieceX == 0){//top row (potential out of bounds issues)
+                    int x1 = pieceX+1;
+                    int y1 = pieceY+1;
+                    int x2 = pieceX+2;
+                    int y2 = pieceY+2;
+
+                    int y3 = pieceY-1;
+                    int y4 = pieceY-2;
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                        return new Point(x2,y2);
+                    }
+                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4)){
+                        return new Point(x2,y4);
+                    }
+                }
+                else if(pieceX == DIM-1){//bottom row
+                    int x1 = pieceX-1;
+                    int y1 = pieceY+1;
+                    int x2 = pieceX-2;
+                    int y2 = pieceY+2;
+
+                    int y3 = pieceY-1;
+                    int y4 = pieceY-2;
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                        return new Point(x2,y2);
+                    }
+                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4)){
+                        return new Point(x2,y4);
+                    }
+                }
+                else if(pieceY == 0){//left column
+                    int x1 = pieceX-1;
+                    int y1 = pieceY+1;
+                    int x2 = pieceX-2;
+                    int y2 = pieceY+2;
+
+                    int x3 = pieceX+1;
+                    int x4 = pieceX+2;
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                        return new Point(x2,y2);
+                    }
+                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2)){
+                        return new Point(x4,y2);
+                    }
+                }
+                else if(pieceY == DIM-1){//right column
+                    int x1 = pieceX-1;
+                    int y1 = pieceY-1;
+                    int x2 = pieceX-2;
+                    int y2 = pieceY-2;
+
+                    int x3 = pieceX+1;
+                    int x4 = pieceX+2;
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                        return new Point(x2,y2);
+                    }
+                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2)){
+                        return new Point(x4,y2);
+                    }
+                }
+                else{//else
+                    //top left
+                    int x1 = pieceX-1;
+                    int y1 = pieceY-1;
+                    int x2 = pieceX-2;
+                    int y2 = pieceY-2;
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                        return new Point(x2,y2);
+                    }
+
+                    //top right
+                    int x3 = pieceX-1;
+                    int y3 = pieceY+1;
+                    int x4 = pieceX-2;
+                    int y4 = pieceY+2;
+                    if(isOccupied(x3, y3) && !isOccupied(x4, y4)){
+                        return new Point(x4,y4);
+                    }
+
+                    //bottom left
+                    int x5 = pieceX+1;
+                    int y5 = pieceY-1;
+                    int x6 = pieceX+2;
+                    int y6 = pieceY-2;
+                    if(isOccupied(x5, y5) && !isOccupied(x6, y6)){
+                        return new Point(x6,y6);
+                    }
+
+                    //bottom right
+                    int x7 = pieceX+1;
+                    int y7 = pieceY+1;
+                    int x8 = pieceX+2;
+                    int y8 = pieceY+2;
+                    if(isOccupied(x7, y7) && !isOccupied(x8, y8)){
+                        return new Point(x8,y8);
+                    }
+                }    return null;
             }
         }
-        System.out.println("failed at 2");
+        System.out.println("%canCapture: failed at end");
         return null;
     }
 
@@ -401,20 +529,6 @@ public Board(int size){
      *Given a piece and a potential point, returns true if it is legal for the given piece to move to the given point
      */
     public boolean isMoveLegal(Piece piece, Point point){ 
-        //silentDrawBoard();
-        
-        // if(piece.getSide().equals("white")){
-        //     if(piece.getX() == 0){
-        //         piece.setIsKing(true);
-        //         board[piece.getX()][piece.getY()].setIsKing(true);
-        //     }
-        // }
-        // else{
-        //     if(piece.getX() == DIM-1){
-        //         piece.setIsKing(true);
-        //         board[piece.getX()][piece.getY()].setIsKing(true);
-        //     }
-        // }
         boolean isKing = piece.getIsKing();
         System.out.println("Piece at " + piece.getX() + "," + piece.getY() + " isKing = " + isKing);
         int pieceX = piece.getX();
@@ -515,9 +629,20 @@ public Board(int size){
             }
         }else{//if piece is a king
             if(side.equals("white")){//WHITE
-                if(pieceX == 0 && pieceY == 0){
+                if(pieceX == DIM-1 && pieceY == DIM-1){ //bottom right
                     //just check 1,1
-                    int newX = pieceX+1;
+                    int newX = pieceX-1;
+                    int newY = pieceY-1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceX == DIM-1 && pieceY == 0){ //bottom left
+                    //just check i+1,j-1
+                    int newX = pieceX-1;
                     int newY = pieceY+1;
                     if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
                         return true;
@@ -526,11 +651,19 @@ public Board(int size){
                         return false;
                     }
                 }
-                else if(pieceX == 0 && pieceY == DIM-1){
-                    //just check i+1,j-1
+                else if(pieceX == 0 && pieceY == DIM-1){ //top right
                     int newX = pieceX+1;
                     int newY = pieceY-1;
-                    System.out.println(!isOccupied(newX, newY) + " " + (newX == potX && newY == potY));
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }  
+                else if(pieceX == 0 && pieceY == 0){ //top left
+                    int newX = pieceX+1;
+                    int newY = pieceY+1;
                     if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
                         return true;
                     }
@@ -538,11 +671,11 @@ public Board(int size){
                         return false;
                     }
                 }
-                else if(pieceY == 0){
+                else if(pieceY == DIM-1){ //right column
                     //just check j+1 in both x directions
-                    int newX = pieceX-1;
-                    int newX2 = pieceX+1;
-                    int newY = pieceY+1;
+                    int newX = pieceX+1;
+                    int newX2 = pieceX-1;
+                    int newY = pieceY-1;
                     if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX2, newY) && (newX2 == potX && newY == potY)))){
                         return true;
                     }
@@ -550,11 +683,11 @@ public Board(int size){
                         return false;
                     }
                 }
-                else if(pieceY == DIM-1){
+                else if(pieceY == 0){ //left column
                     //just check j-1
                     int newX = pieceX-1;
                     int newX2 = pieceX+1;
-                    int newY = pieceY-1;
+                    int newY = pieceY+1;
                     if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX2, newY) && (newX2 == potX && newY == potY)))){
                         return true;
                     }
@@ -562,8 +695,19 @@ public Board(int size){
                         return false;
                     }
                 }
-                else if(pieceX == 0){
+                else if(pieceX == DIM-1){ //bottom row
                     //check j+/-1
+                    int newX = pieceX-1;
+                    int newY = pieceY-1;
+                    int newY2 = pieceY+1;
+                    if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX, newY2) && (newX == potX && newY2 == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceX == 0){ //top row
                     int newX = pieceX+1;
                     int newY = pieceY-1;
                     int newY2 = pieceY+1;
@@ -576,10 +720,10 @@ public Board(int size){
                 }
                 else{
                     //check i-1 and j-1 AND j+1
-                    int newX1 = pieceX-1;
-                    int newX2 = pieceX+1;
-                    int newY1 = pieceY-1;
-                    int newY2 = pieceY+1;
+                    int newX1 = pieceX+1;
+                    int newX2 = pieceX-1;
+                    int newY1 = pieceY+1;
+                    int newY2 = pieceY-1;
                     if((!isOccupied(newX1, newY1) && (newX1 == potX && newY1 == potY)) || ((!isOccupied(newX2, newY1) && (newX2 == potX && newY1 == potY)))){ //x1,y1
                         return true;
                     }
@@ -589,10 +733,13 @@ public Board(int size){
                     else{
                         return false;
                     }
+                
                 }
+
             }
+
             else{//BLACK
-                if(pieceX == DIM-1 && pieceY == DIM-1){
+                if(pieceX == DIM-1 && pieceY == DIM-1){ //bottom right
                     //just check 1,1
                     int newX = pieceX-1;
                     int newY = pieceY-1;
@@ -603,7 +750,7 @@ public Board(int size){
                         return false;
                     }
                 }
-                else if(pieceX == DIM-1 && pieceY == 0){
+                else if(pieceX == DIM-1 && pieceY == 0){ //bottom left
                     //just check i+1,j-1
                     int newX = pieceX-1;
                     int newY = pieceY+1;
@@ -614,7 +761,27 @@ public Board(int size){
                         return false;
                     }
                 }
-                else if(pieceY == DIM-1){
+                else if(pieceX == 0 && pieceY == DIM-1){ //top right
+                    int newX = pieceX+1;
+                    int newY = pieceY-1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }           
+                else if(pieceX == 0 && pieceY == 0){ //top left
+                    int newX = pieceX+1;
+                    int newY = pieceY+1;
+                    if(!isOccupied(newX, newY) && (newX == potX && newY == potY)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceY == DIM-1){ //right column
                     //just check j+1 in both x directions
                     int newX = pieceX+1;
                     int newX2 = pieceX-1;
@@ -626,7 +793,7 @@ public Board(int size){
                         return false;
                     }
                 }
-                else if(pieceY == 0){
+                else if(pieceY == 0){ //left column
                     //just check j-1
                     int newX = pieceX-1;
                     int newX2 = pieceX+1;
@@ -638,10 +805,20 @@ public Board(int size){
                         return false;
                     }
                 }
-                else if(pieceX == DIM-1){
-                    System.out.println("im here thats good");
+                else if(pieceX == DIM-1){ //bottom row
                     //check j+/-1
                     int newX = pieceX-1;
+                    int newY = pieceY-1;
+                    int newY2 = pieceY+1;
+                    if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX, newY2) && (newX == potX && newY2 == potY)))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(pieceX == 0){ //top row
+                    int newX = pieceX+1;
                     int newY = pieceY-1;
                     int newY2 = pieceY+1;
                     if((!isOccupied(newX, newY) && (newX == potX && newY == potY)) || ((!isOccupied(newX, newY2) && (newX == potX && newY2 == potY)))){
@@ -703,12 +880,15 @@ public Board(int size){
                 if(getPiece(p1).getSide().equals(("white"))){
                     if(getPiece(p1).getIsKing()){
                         removePointFromList(p1,whitePosList);
+                        removePointFromList(p1,whiteKingList);
+                        board[p1.getX()][p1.getY()] = null;
                         whiteKingList.add(p2);
                         whitePosList.add(p2);
                         silentDrawBoard();
                     }
                     else{
                         removePointFromList(p1,whitePosList);
+                        board[p1.getX()][p1.getY()] = null;
                         whitePosList.add(p2);
                         silentDrawBoard();
                     }
@@ -722,12 +902,15 @@ public Board(int size){
                 else{
                     if(getPiece(p1).getIsKing()){
                         removePointFromList(p1,blackPosList); //p3
+                        removePointFromList(p1,blackKingList);
+                        board[p1.getX()][p1.getY()] = null;
                         blackKingList.add(p2);
                         blackPosList.add(p2);
                         silentDrawBoard();
                     }
                     else{
                         removePointFromList(p1,blackPosList);
+                        board[p1.getX()][p1.getY()] = null;
                         blackPosList.add(p2);
                         silentDrawBoard();
                     }
@@ -753,27 +936,40 @@ public Board(int size){
                 System.out.println("ERROR(move) | USAGE");
                 System.exit(0);
             }
-            Point p1 = cordToPoint(parts[0]);
-            Point p2 = cordToPoint(parts[1]);
+            Point p1 = cordToPoint(parts[0]); //C4 -> 2,3
+            Point p2 = cordToPoint(parts[1]); //B3 -> 1,2
             boolean keepJumping = true;
             if(canCapture(getPiece(p1)) == null){
                 System.out.println("Invalid move can. Capture returned null");
                 System.exit(0);
             }
             while(keepJumping){
+                //System.out.println((getPiece(p1) != null) + " " +  (canCapture(getPiece(p1)) != null));
                 if(getPiece(p1) != null && canCapture(getPiece(p1)) != null){ 
+                    System.out.println("HERE!");
+                    boolean isPKing = getPiece(p1).getIsKing();
                         if(getPiece(p1).getSide().equals(("white"))){
-                            Point p3 = canCapture(getPiece(p1)); //new point after jump
-                            System.out.println(p3);
-                            board[p1.getX()][p1.getY()] = null;
-                            removePointFromList(p1,whitePosList);
-                            whitePosList.add(p3);
-                            //silentDrawBoard();
-                            if(p3.getX() == 0 && !getPiece(p3).getIsKing()){
-                                board[p3.getX()][p3.getY()].setIsKing(true);
+                            Point p3 = canCapture(getPiece(p1)); //new point after jump -> 0,1
+                            System.out.println("P3: " + p3);
+                            if(p3.getX() == 0 && !getPiece(p1).getIsKing()){
+                                //board[p3.getX()][p3.getY()].setIsKing(true);
+                                isPKing = true;
                                 System.out.println("%move: Piece at " + p3 + " set to king");
-                                System.out.println("%move: Piece at " + p3 + " isKing: " + getPiece(p3).getIsKing());
                             }
+                            board[p1.getX()][p1.getY()] = null;
+                            board[p2.getX()][p2.getY()] = null;
+                            removePointFromList(p1,whitePosList);
+                            removePointFromList(p1,whiteKingList);
+                            removePointFromList(p2,blackPosList);
+                            removePointFromList(p2,blackKingList);
+                            if(isPKing){
+                                whiteKingList.add(p3);
+                                whitePosList.add(p3);
+                            }
+                            else{
+                                whitePosList.add(p3);
+                            }
+                            silentDrawBoard();
                             if(canCapture(getPiece(p3)) == null){
                                 keepJumping = false;
                             }
@@ -787,15 +983,25 @@ public Board(int size){
                         else{
                             Point p3 = canCapture(getPiece(p1)); //new point after jump
                             System.out.println(p3);
-                            board[p1.getX()][p1.getY()] = null;
-                            removePointFromList(p1,blackPosList); //p3
-                            blackPosList.add(p3);
-                            //silentDrawBoard();
-                            if(p3.getX() == DIM-1){
+                            if(p3.getX() == DIM-1 && !getPiece(p1).getIsKing()){
                                 board[p3.getX()][p3.getY()].setIsKing(true);
                                 System.out.println("%move: Piece at " + p3 + " set to king");
                                 System.out.println("%move: Piece at " + p3 + " isKing: " + getPiece(p3).getIsKing());
                             }
+                            board[p1.getX()][p1.getY()] = null;
+                            board[p2.getX()][p2.getY()] = null;
+                            removePointFromList(p1,blackPosList);
+                            removePointFromList(p1,blackKingList);
+                            removePointFromList(p2,whitePosList);
+                            removePointFromList(p2,whiteKingList);
+                            if(isPKing){
+                                blackKingList.add(p3);
+                            }
+                            else{
+                                blackPosList.add(p3);
+                            }
+                            
+                            silentDrawBoard();
                             if(canCapture(getPiece(p3)) == null){
                                 keepJumping = false;
                             }
@@ -809,7 +1015,7 @@ public Board(int size){
 
                 }
                         else{
-                            System.out.println("Invalid move"); 
+                            System.out.println("%move: Invalid move"); 
                             keepJumping = false;
                             //System.exit(0);
                         }
@@ -877,4 +1083,15 @@ public Board(int size){
             System.out.println();
         }
     }
+    public ArrayList<Point> getWhiteKingList() {
+        return this.whiteKingList;
+    }
+    public void setWhiteKingList(ArrayList<Point> whiteKingList) {
+        this.whiteKingList = whiteKingList;
+    }
+    public ArrayList<Point> getBlackKingList() {
+        return this.blackKingList;        }
+    public void setBlackKingList(ArrayList<Point> blackKingList) {
+            this.blackKingList = blackKingList;
+        }
 }

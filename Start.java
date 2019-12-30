@@ -90,14 +90,16 @@ public class Start {
         if(dim == 4){
             ArrayList<Point> wPosList = new ArrayList<Point>();
             ArrayList<Point> bPosList = new ArrayList<Point>();
-            Point w1 = new Point(1,2);
-            Point b1 = new Point(2,1);
-            //Point b2 = new Point(0,1);
+            Point w1 = new Point(2,1);
+            Point b1 = new Point(1,2);
+            Point b2 = new Point(0,1);
             wPosList.add(w1);
             bPosList.add(b1);
-            //bPosList.add(b2);
+            bPosList.add(b2);
             b.setWhitePosList(wPosList);
             b.setBlackPosList(bPosList);
+            b.setWhiteKingList(wPosList);
+            b.setBlackKingList(bPosList);
             b.drawBoard();
         }
     }
