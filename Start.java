@@ -124,6 +124,22 @@ public class Start {
 
             b.drawBoard();
         }
+        else{
+            ArrayList<Point> wPosList = new ArrayList<Point>();
+            ArrayList<Point> bPosList = new ArrayList<Point>();
+            Point w1 = new Point(2,0);
+            Point b1 = new Point(1,1);
+            Point b2 = new Point(1,3);
+
+            wPosList.add(w1);
+            bPosList.add(b1);
+            bPosList.add(b2);
+
+            b.setWhitePosList(wPosList);
+            b.setBlackPosList(bPosList);
+
+            b.drawBoard();
+        }
     }
 
     public static void printBoardState(Piece[][] board){

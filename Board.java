@@ -81,7 +81,11 @@ public Board(int size){
                             System.out.print(getPiece(new Point(x,y)) + " ");
                         }
                     }else{
-                        System.out.print("   ");
+                        // x = (i-1)/2;
+                        // y = (j-1)/2;
+                        // String temp = pointToCord(new Point(x,y));
+                        System.out.print("   "); //print coordinate?
+                        //System.out.print(temp); //print coordinate?
                     }
                 }
             }
@@ -89,6 +93,18 @@ public Board(int size){
             System.out.println();
         }
     }
+
+    /*
+     *
+     */
+     public String pointToCord(Point p){
+         //0 = A, 1 = B....
+         int x = p.getX();
+         int y = p.getY();
+         String f = (char)(x+65) + ""; 
+         String  l = (y+1) + " ";
+         return f+l;
+     }
 
     /*
     assigns correct values without printing anything
@@ -107,40 +123,61 @@ public Board(int size){
                     //System.out.print("| ");
                 }
                 else{                   
-                    //place piece at 0,1
                     x = (i-1)/2;
                     y = (j-1)/2;
                     Point pt = new Point(x,y);
                     if(pt.isInList(whitePosList)){
-                        if(board[x][y] == null){
+                        if(board[x][y] == null && !pt.isInList(whiteKingList)){
                             Piece p = new Piece("white", x, y);
                             p.setX(x);
                             p.setY(y);
                             board[x][y] = p;
-                            //System.out.print(p + "  ");
+                            //System.out.print(p + " ");
+                        }
+                        else if(pt.isInList(whiteKingList)){
+                            Piece p = new Piece("white", x, y);
+                            p.setX(x);
+                            p.setY(y);
+                            p.setIsKing(true);
+                            board[x][y] = p;
+                            //System.out.print(p + " ");
                         }
                         else{
-                            //System.out.print(getPiece(new Point(x,y)) + "  ");
+                            System.out.print(getPiece(new Point(x,y)) + " ");
                         }
+                        
+                        
                     }else if(pt.isInList(blackPosList)){
-                        if(board[x][y] == null){
+                        if(board[x][y] == null && !pt.isInList(blackKingList)){
                             Piece p = new Piece("black", x, y);
                             p.setX(x);
                             p.setY(y);
                             board[x][y] = p;
                             //currentPieces.add(pt);
-                            //System.out.print(p + "  ");
+                            //System.out.print(p + " ");
+                        }
+                        else if(pt.isInList(blackKingList)){
+                            Piece p = new Piece("black", x, y);
+                            p.setX(x);
+                            p.setY(y);
+                            p.setIsKing(true);
+                            board[x][y] = p;
+                            //System.out.print(p + " ");
                         }
                         else{
-                            //System.out.print(getPiece(new Point(x,y)) + "  old");
+                            //System.out.print(getPiece(new Point(x,y)) + " ");
                         }
                     }else{
-                        //System.out.print("   ");
+                        // x = (i-1)/2;
+                        // y = (j-1)/2;
+                        // String temp = pointToCord(new Point(x,y));
+                        //System.out.print("   "); //print coordinate?
+                        //System.out.print(temp); //print coordinate?
                     }
                 }
             }
             
-            //System.out.println();
+            System.out.println();
         }
     }
     /*
@@ -174,7 +211,7 @@ public Board(int size){
     public Point canCapture(Piece piece){
         //TODO add cancaptures clauses for king's
         silentDrawBoard();
-        printBoardState(board);
+        //printBoardState(board);
         System.out.println();
         if(piece == null){
             System.out.println("piece == null in canCapture");
@@ -1107,6 +1144,9 @@ public Board(int size){
                             }
                             silentDrawBoard();
                             if(canCapture(getPiece(p3)) == null){
+                                System.out.println("getPiece at " + p3 + " is " + getPiece(p3));
+                                System.out.println("cancaptures=null on piece at " + p3 + " is " + (canCapture(getPiece(p3)) == null));
+                                System.out.println("%move: Setting keepJump to false");
                                 keepJumping = false;
                             }
                             else{
