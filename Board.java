@@ -8,15 +8,52 @@ public class Board {
     private ArrayList<Point> whiteKingList;
     private ArrayList<Point> blackKingList;
     private ArrayList<Point> jumpedPiece;
+    private boolean blackTurn = true;
 
 public Board(int size){
         DIM = size;
-        board = new Piece [DIM][DIM]; 
+        board = new Piece [DIM][DIM];
         whitePosList = new ArrayList<Point>();
         blackPosList = new ArrayList<Point>();
         whiteKingList = new ArrayList<Point>();
         blackKingList = new ArrayList<Point>();
-        jumpedPiece = new ArrayList<Point>();
+        jumpedPiece = new ArrayList<Point>(); 
+        if(size == 4){
+            Point w1 = new Point(3,0);
+            Point w2 = new Point(3,2);
+            Point b1 = new Point(0,1);
+            Point b2 = new Point(0,3);
+            whitePosList.add(w1);
+            whitePosList.add(w2);
+            blackPosList.add(b1);
+            blackPosList.add(b2);
+        }else{
+            for(int i = 0; i<size; i++){
+                for(int j = 0; j<size; j++){
+                    if(i<=2){
+                        if(i%2==0 && j%2!=0){
+                            Point p = new Point(i,j);//place black piece
+                            blackPosList.add(p);
+                        }
+                        else if(i%2!=0 && j%2==0){
+                            Point p = new Point(i,j);//place black piece
+                            blackPosList.add(p);
+                        }
+                    }
+                    else if(i>=5){
+                        if(i%2!=0 && j%2==0){
+                            Point p = new Point(i,j);//place black piece
+                            whitePosList.add(p);
+                        }
+                        else if(i%2==0 && j%2!=0){
+                            Point p = new Point(i,j);//place black piece
+                            whitePosList.add(p);
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     /*
@@ -102,7 +139,7 @@ public Board(int size){
          int x = p.getX();
          int y = p.getY();
          String f = (char)(x+65) + ""; 
-         String  l = (y+1) + " ";
+         String l = (y+1) + ""; //was a space here 
          return f+l;
      }
 
@@ -188,7 +225,7 @@ public Board(int size){
             System.out.println("OUT OF RANGE");
             return false;
         }
-        if(board[x][y] != null){
+        if(inRange(x) && inRange(y) && board[x][y] != null){
             return true;
         }
         return false;
@@ -328,7 +365,6 @@ public Board(int size){
                     }
                 }
                 else if(pieceX == 0 && pieceY == DIM-1){//top right
-                    System.out.println("%canCapture: HERE");
                     int x1 = pieceX+1;
                     int y1 = pieceY-1;
                     int x2 = pieceX+2;
@@ -515,7 +551,6 @@ public Board(int size){
                     }
                 }
                 else if(pieceX == 0 && pieceY == DIM-1){//top right
-                    System.out.println("%canCapture: HERE");
                     int x1 = pieceX+1;
                     int y1 = pieceY-1;
                     int x2 = pieceX+2;
@@ -696,7 +731,7 @@ public Board(int size){
      */
     public boolean isMoveLegal(Piece piece, Point point){ 
         boolean isKing = piece.getIsKing();
-        System.out.println("Piece at " + piece.getX() + "," + piece.getY() + " isKing = " + isKing);
+        //System.out.println("Piece at " + piece.getX() + "," + piece.getY() + " isKing = " + isKing);
         int pieceX = piece.getX();
         int pieceY = piece.getY();
         String side = piece.getSide();
@@ -1021,7 +1056,7 @@ public Board(int size){
     public Piece getPiece(Point p){
         //System.out.println("%getPiece: p: " + p.getX() + "," + p.getY());
         if(board[p.getX()][p.getY()] == null){
-            System.out.println("returning null in getpiece on point: " + p);
+            //System.out.println("returning null in getpiece on point: " + p);
             return null;
         }
         else{
@@ -1051,12 +1086,14 @@ public Board(int size){
                         board[p1.getX()][p1.getY()] = null;
                         whiteKingList.add(p2);
                         whitePosList.add(p2);
+                        blackTurn = true;
                         silentDrawBoard();
                     }
                     else{
                         removePointFromList(p1,whitePosList);
                         board[p1.getX()][p1.getY()] = null;
                         whitePosList.add(p2);
+                        blackTurn = true;
                         silentDrawBoard();
                     }
                     
@@ -1073,12 +1110,14 @@ public Board(int size){
                         board[p1.getX()][p1.getY()] = null;
                         blackKingList.add(p2);
                         blackPosList.add(p2);
+                        blackTurn = false;
                         silentDrawBoard();
                     }
                     else{
                         removePointFromList(p1,blackPosList);
                         board[p1.getX()][p1.getY()] = null;
                         blackPosList.add(p2);
+                        blackTurn = false;
                         silentDrawBoard();
                     }
                     if(p2.getX() == DIM-1){
@@ -1148,6 +1187,7 @@ public Board(int size){
                                 System.out.println("cancaptures=null on piece at " + p3 + " is " + (canCapture(getPiece(p3)) == null));
                                 System.out.println("%move: Setting keepJump to false");
                                 keepJumping = false;
+                                blackTurn = true;
                             }
                             else{
                                 p1 = p3; //new start state is old last state
@@ -1183,6 +1223,7 @@ public Board(int size){
                             silentDrawBoard();
                             if(canCapture(getPiece(p3)) == null){
                                 keepJumping = false;
+                                blackTurn = false;
                             }
                             else{
                                 p1 = p3; //new start state is old last state
@@ -1196,6 +1237,7 @@ public Board(int size){
                         else{
                             System.out.println("%move: Invalid move"); 
                             keepJumping = false;
+                            blackTurn = false;
                             //System.exit(0);
                         }
             }
@@ -1273,4 +1315,83 @@ public Board(int size){
     public void setBlackKingList(ArrayList<Point> blackKingList) {
             this.blackKingList = blackKingList;
         }
+    public boolean isBlackTurn(){
+        return blackTurn;
+    }
+
+    /*
+    Returns arraylist of all board states 1 move deep
+    */
+    public ArrayList<Board> getChildren(){
+        ArrayList<Board> list = new ArrayList<Board>();
+        for(int i = 0; i<DIM; i++){
+            for(int j= 0; j<DIM; j++){
+                Point p = new Point(i,j);
+                if(getPiece(p)!=null){
+                    ArrayList<Point> temp_moves = getMoves(getPiece(p));//get all possible moves for piece
+                    for(int k = 0; k<temp_moves.size(); k++){
+                        Board b = setBoardWithMove(this, getPiece(p), temp_moves.get(k)); //generate board with move k played
+                        list.add(b);
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    /*
+    Given a board state and a point
+    */
+    public Board setBoardWithMove(Board b, Piece piece, Point p){
+        Board resBoard = b;
+        int pX = piece.getX();
+        int pY = piece.getY();
+        String from = pointToCord(new Point(pX, pY));
+        String to = pointToCord(p);
+        String cat = from+"-"+to;
+        System.out.println("CAT: " + cat);
+        resBoard.move(cat,resBoard.getWhitePosList(), resBoard.getBlackPosList());
+        return resBoard;
+    }
+
+    public ArrayList<Point> getMoves(Piece p){
+        ArrayList<Point> moves = new ArrayList<Point>();
+        int x = p.getX();
+        int y = p.getY();
+        Point p1 = new Point(x-1, y-1);
+        Point p2 = new Point(x-1, y+1);
+        Point p3 = new Point(x+1, y-1);
+        Point p4 = new Point(x+1, y+1);
+        Point p5 = new Point(x-2, y-2);
+        Point p6 = new Point(x-2, y+2);
+        Point p7 = new Point(x+2, y-2);
+        Point p8 = new Point(x+2, y+2);
+        if(isMoveLegal(p,p1)){
+            moves.add(p1);
+        }
+        if(isMoveLegal(p,p2)){
+            moves.add(p2);
+        }
+        if(isMoveLegal(p,p3)){
+            moves.add(p3);
+        }
+        if(isMoveLegal(p,p4)){
+            moves.add(p4);
+        }
+        if(canCapture(p)!= null && canCapture(p).getX() == p5.getX() && canCapture(p).getY() == p5.getY()){
+            moves.add(p5);
+        }
+        if(canCapture(p)!= null && canCapture(p).getX() == p6.getX() && canCapture(p).getY() == p6.getY()){
+            moves.add(p6);
+        }
+        if(canCapture(p)!= null && canCapture(p).getX() == p7.getX() && canCapture(p).getY() == p7.getY()){
+            moves.add(p7);
+        }
+        if(canCapture(p)!= null && canCapture(p).getX() == p8.getX() && canCapture(p).getY() == p8.getY()){
+            moves.add(p8);
+        }
+        return moves;
+    }
+
+
 }
