@@ -1067,7 +1067,7 @@ public class Board {
      *Takes string as parameter. (e.g. Dc2) and updates board to move piece from D rank to c2 (2,1), if legal
      */
     public void move(String str, ArrayList<Point> wPosList, ArrayList<Point> bPosList){
-        printBoardState(board);
+        //printBoardState(board);
         if(str.contains("-")){
             String [] parts = str.split("-"); 
             if(parts.length != 2){
@@ -1151,9 +1151,9 @@ public class Board {
                     boolean isPKing = getPiece(p1).getIsKing();
                     if(getPiece(p1).getSide().equals(("white"))){
                             Point p3 = canCapture(getPiece(p1)); //new point after jump -> 0,1
-                            System.out.println("P1: " + p1);
-                            System.out.println("P2: " + p2);
-                            System.out.println("P3: " + p3);
+                            // System.out.println("P1: " + p1);
+                            // System.out.println("P2: " + p2);
+                            // System.out.println("P3: " + p3);
                             if(p3.getX() == 0 && !getPiece(p1).getIsKing()){
                                 isPKing = true;
                                 //System.out.println("%move: Piece at " + p3 + " set to king");
@@ -1190,7 +1190,7 @@ public class Board {
                     }
                     else{ //BLACK
                             Point p3 = canCapture(getPiece(p1)); //new point after jump
-                            System.out.println(p3);
+                            //System.out.println(p3);
                             if(p3.getX() == DIM-1 && !getPiece(p1).getIsKing()){
                                 isPKing = true;
                                 //board[p3.getX()][p3.getY()].setIsKing(true);
@@ -1348,15 +1348,16 @@ public class Board {
         return moves;
     }
 
+    
+    
+
+    //GETTERS and SETTERS
     public int getUtilValue(){
         return utilValue;
     }
-
     public void setUtilValue(int v){
         utilValue = v;
     }
-
-    //GETTERS and SETTERS
     public ArrayList<Point> getWhitePosList() {
         return this.whitePosList;
     }

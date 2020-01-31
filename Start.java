@@ -12,9 +12,9 @@ public class Start {
 
         //getChildren test
         ArrayList<Board> children = b1.getChildren();
-        for(int i = 0; i<children.size(); i++){
-            children.get(i).drawBoard();
-        }
+        // for(int i = 0; i<children.size(); i++){
+        //     children.get(i).drawBoard();
+        // }
         
         // while(!m.equals("quit")){
         //     if(b1.getWhitePosList().isEmpty()){
