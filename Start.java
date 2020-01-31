@@ -10,52 +10,58 @@ public class Start {
         String m = "";
         int move = 1;
 
-        // b1 = b1.setBoardWithMove(b1, b1.getPiece(new Point(0,1)), new Point(1,0));
-        // b1.drawBoard();
+        b1 = b1.setBoardWithMove(b1, b1.getPiece(new Point(0,1)), new Point(1,0));
+        b1.drawBoard();
+        b1 = b1.setBoardWithMove(b1, b1.getPiece(new Point(3,0)), new Point(2,1));
+        b1.drawBoard();
+        b1 = b1.setBoardWithMove(b1, b1.getPiece(new Point(0,3)), new Point(1,2));
+        b1.drawBoard();
+        b1 = b1.setBoardWithMove(b1, b1.getPiece(new Point(2,1)), new Point(0,3));
+        b1.drawBoard();
         
-        while(!m.equals("quit")){
-            if(b1.getWhitePosList().isEmpty()){
-                System.out.println("Black wins!");
-                System.exit(0);
-            }
-            else if(b1.getBlackPosList().isEmpty()){
-                System.out.println("White wins!");
-                System.exit(0);
-            }
-            else{
-                System.out.print("Enter a move: ");
-                m = sc.next();
-                if(m.equals("quit")) System.exit(0);
-                String pieceStr = m.substring(0,2);
-                System.out.println("sub is " + pieceStr);
-                if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
-                    System.out.print("Black's turn, try again: ");
-                }
-                else if(!b1.isBlackTurn() && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
-                    System.out.print("White's turn, try again: ");
-                }
-                else{
-                    b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
-                    move++;
-                    System.out.println("\n");
-                    b1.drawBoard();
-                }
-                // String pieceStr = m.substring(0,2);
-                // System.out.println("sub is " + pieceStr);
-                // if(move%2 != 0 && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
-                //     System.out.print("Black's turn, try again: ");
-                // }
-                // else if(move%2 == 0 && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
-                //     System.out.print("White's turn, try again: ");
-                // }
-                // else{
-                //     b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
-                //     move++;
-                //     System.out.println("\n");
-                //     b1.drawBoard();
-                // }
-            }
-        }
+        // while(!m.equals("quit")){
+        //     if(b1.getWhitePosList().isEmpty()){
+        //         System.out.println("Black wins!");
+        //         System.exit(0);
+        //     }
+        //     else if(b1.getBlackPosList().isEmpty()){
+        //         System.out.println("White wins!");
+        //         System.exit(0);
+        //     }
+        //     else{
+        //         System.out.print("Enter a move: ");
+        //         m = sc.next();
+        //         if(m.equals("quit")) System.exit(0);
+        //         String pieceStr = m.substring(0,2);
+        //         System.out.println("sub is " + pieceStr);
+        //         if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
+        //             System.out.print("Black's turn, try again: ");
+        //         }
+        //         else if(!b1.isBlackTurn() && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
+        //             System.out.print("White's turn, try again: ");
+        //         }
+        //         else{
+        //             b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
+        //             move++;
+        //             System.out.println("\n");
+        //             b1.drawBoard();
+        //         }
+        //         // String pieceStr = m.substring(0,2);
+        //         // System.out.println("sub is " + pieceStr);
+        //         // if(move%2 != 0 && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
+        //         //     System.out.print("Black's turn, try again: ");
+        //         // }
+        //         // else if(move%2 == 0 && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
+        //         //     System.out.print("White's turn, try again: ");
+        //         // }
+        //         // else{
+        //         //     b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
+        //         //     move++;
+        //         //     System.out.println("\n");
+        //         //     b1.drawBoard();
+        //         // }
+        //     }
+        // }
     }
 
     public static void loadInitialBoard(Board b, int dim){

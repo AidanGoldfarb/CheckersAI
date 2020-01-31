@@ -134,14 +134,14 @@ public Board(int size){
     /*
      *
      */
-     public String pointToCord(Point p){
+    public String pointToCord(Point p){
          //0 = A, 1 = B....
          int x = p.getX();
          int y = p.getY();
          String f = (char)(x+65) + ""; 
          String l = (y+1) + ""; //was a space here 
          return f+l;
-     }
+    }
 
     /*
     assigns correct values without printing anything
@@ -1348,7 +1348,13 @@ public Board(int size){
         int pY = piece.getY();
         String from = pointToCord(new Point(pX, pY));
         String to = pointToCord(p);
-        String cat = from+"-"+to;
+        String cat = "";
+        if(Math.abs(pX-p.getX()) == 1 && Math.abs(pY-p.getY()) == 1){
+            cat = from+"-"+to;
+        }
+        else if(Math.abs(pX-p.getX()) == 2 && Math.abs(pY-p.getY()) == 2){
+            cat = from+"x"+to;
+        }
         System.out.println("CAT: " + cat);
         resBoard.move(cat,resBoard.getWhitePosList(), resBoard.getBlackPosList());
         return resBoard;
