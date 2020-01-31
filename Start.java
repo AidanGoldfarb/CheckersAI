@@ -10,14 +10,11 @@ public class Start {
         String m = "";
         int move = 1;
 
-        b1 = b1.setBoardWithMove(b1, b1.getPiece(new Point(0,1)), new Point(1,0));
-        b1.drawBoard();
-        b1 = b1.setBoardWithMove(b1, b1.getPiece(new Point(3,0)), new Point(2,1));
-        b1.drawBoard();
-        b1 = b1.setBoardWithMove(b1, b1.getPiece(new Point(0,3)), new Point(1,2));
-        b1.drawBoard();
-        b1 = b1.setBoardWithMove(b1, b1.getPiece(new Point(2,1)), new Point(0,3));
-        b1.drawBoard();
+        //getChildren test
+        ArrayList<Board> children = b1.getChildren();
+        for(int i = 0; i<children.size(); i++){
+            children.get(i).drawBoard();
+        }
         
         // while(!m.equals("quit")){
         //     if(b1.getWhitePosList().isEmpty()){

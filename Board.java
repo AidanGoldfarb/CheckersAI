@@ -9,8 +9,9 @@ public class Board {
     private ArrayList<Point> blackKingList;
     private ArrayList<Point> jumpedPiece;
     private boolean blackTurn = true;
+    private int utilValue = Integer.MIN_VALUE;
 
-public Board(int size){
+    public Board(int size){
         DIM = size;
         board = new Piece [DIM][DIM];
         whitePosList = new ArrayList<Point>();
@@ -246,10 +247,8 @@ public Board(int size){
          returns valid capture point in future... 
      */
     public Point canCapture(Piece piece){
-        //TODO add cancaptures clauses for king's
         silentDrawBoard();
-        //printBoardState(board);
-        System.out.println();
+        //System.out.println();
         if(piece == null){
             System.out.println("piece == null in canCapture");
             System.exit(0);
@@ -258,8 +257,7 @@ public Board(int size){
         int pieceX = piece.getX();
         int pieceY = piece.getY();
         String side = piece.getSide();
-        // int potX = point.getX();
-        // int potY = point.getY();
+
         if(!piece.getIsKing()){//not King piece
             if(side.equals("white")){//WHITE
                 if(pieceX <= 1){
@@ -350,8 +348,9 @@ public Board(int size){
                     }
                 }
             }
-        }else{//King piece
-            if(side.equals("white")){//WHITE KING
+        }
+        else{//King piece //}
+            if(side.equals("white")){ //WHITE KING
                 if(pieceX == 0 && pieceY == 0){//top left
                     int x1 = pieceX+1;
                     int y1 = pieceY+1;
@@ -536,6 +535,7 @@ public Board(int size){
                     return null;
                 }
             }
+
 
             else{//BLACK KING 
                 if(pieceX == 0 && pieceY == 0){//top left
@@ -731,7 +731,6 @@ public Board(int size){
      */
     public boolean isMoveLegal(Piece piece, Point point){ 
         boolean isKing = piece.getIsKing();
-        //System.out.println("Piece at " + piece.getX() + "," + piece.getY() + " isKing = " + isKing);
         int pieceX = piece.getX();
         int pieceY = piece.getY();
         String side = piece.getSide();
@@ -1078,7 +1077,6 @@ public Board(int size){
             Point p1 = cordToPoint(parts[0]);
             Point p2 = cordToPoint(parts[1]);
             if(getPiece(p1) != null && isMoveLegal(getPiece(p1), p2)){ //there is a piece on p1 and it can move to p2
-
                 if(getPiece(p1).getSide().equals(("white"))){
                     if(getPiece(p1).getIsKing()){
                         removePointFromList(p1,whitePosList);
@@ -1099,7 +1097,7 @@ public Board(int size){
                     
                     if(p2.getX() == 0){
                         board[p2.getX()][p2.getY()].setIsKing(true);
-                        System.out.println("Piece at " + p2 + " set to king");
+                        //System.out.println("Piece at " + p2 + " set to king");
                         silentDrawBoard();
                     }
                 }
@@ -1122,12 +1120,10 @@ public Board(int size){
                     }
                     if(p2.getX() == DIM-1){
                         board[p2.getX()][p2.getY()].setIsKing(true);
-                        System.out.println("Piece at " + p2 + " set to king");
+                        //System.out.println("Piece at " + p2 + " set to king");
                         silentDrawBoard();
                     }
                 }
-                
-
             }
             else{
                 System.out.println("Invalid move");
@@ -1152,18 +1148,17 @@ public Board(int size){
             while(keepJumping){
                 System.out.println((getPiece(p1) != null) + " " +  (canCapture(getPiece(p1)) != null));
                 if(getPiece(p1) != null && canCapture(getPiece(p1)) != null){ 
-                    System.out.println("HERE!");
                     boolean isPKing = getPiece(p1).getIsKing();
-                        if(getPiece(p1).getSide().equals(("white"))){
+                    if(getPiece(p1).getSide().equals(("white"))){
                             Point p3 = canCapture(getPiece(p1)); //new point after jump -> 0,1
                             System.out.println("P1: " + p1);
                             System.out.println("P2: " + p2);
                             System.out.println("P3: " + p3);
                             if(p3.getX() == 0 && !getPiece(p1).getIsKing()){
                                 isPKing = true;
-                                System.out.println("%move: Piece at " + p3 + " set to king");
+                                //System.out.println("%move: Piece at " + p3 + " set to king");
                             }
-                            System.out.println("%move: Removing " + p1 + " and " + p2);
+                            //System.out.println("%move: Removing " + p1 + " and " + p2);
                             board[p1.getX()][p1.getY()] = null;
                             board[p2.getX()][p2.getY()] = null; //removed jumped piece
                             removePointFromList(p1,whitePosList);
@@ -1183,24 +1178,23 @@ public Board(int size){
                             }
                             silentDrawBoard();
                             if(canCapture(getPiece(p3)) == null){
-                                System.out.println("getPiece at " + p3 + " is " + getPiece(p3));
-                                System.out.println("cancaptures=null on piece at " + p3 + " is " + (canCapture(getPiece(p3)) == null));
-                                System.out.println("%move: Setting keepJump to false");
+                                //System.out.println("getPiece at " + p3 + " is " + getPiece(p3));
+                                //System.out.println("cancaptures=null on piece at " + p3 + " is " + (canCapture(getPiece(p3)) == null));
+                                //System.out.println("%move: Setting keepJump to false");
                                 keepJumping = false;
                                 blackTurn = true;
                             }
                             else{
                                 p1 = p3; //new start state is old last state
                             }
-
-                        }
-                        else{ //BLACK
+                    }
+                    else{ //BLACK
                             Point p3 = canCapture(getPiece(p1)); //new point after jump
                             System.out.println(p3);
                             if(p3.getX() == DIM-1 && !getPiece(p1).getIsKing()){
                                 isPKing = true;
                                 //board[p3.getX()][p3.getY()].setIsKing(true);
-                                System.out.println("%move: Piece at " + p3 + " set to king");
+                                //System.out.println("%move: Piece at " + p3 + " set to king");
                             }
                             board[p1.getX()][p1.getY()] = null;
                             board[p2.getX()][p2.getY()] = null;
@@ -1228,21 +1222,21 @@ public Board(int size){
                             else{
                                 p1 = p3; //new start state is old last state
                             }
-                            System.out.println("Nulling (" + p1.getX() + "," + p1.getY() + ")" + "AND " + "Nulling (" + p2.getX() + "," + p2.getY() + ")");
+                            //System.out.println("Nulling (" + p1.getX() + "," + p1.getY() + ")" + "AND " + "Nulling (" + p2.getX() + "," + p2.getY() + ")");
                             board[p1.getX()][p1.getY()] = null;
                             board[p2.getX()][p2.getY()] = null;
-                        }
-
+                    }
                 }
-                        else{
-                            System.out.println("%move: Invalid move"); 
-                            keepJumping = false;
-                            blackTurn = false;
-                            //System.exit(0);
-                        }
+                else{
+                    System.out.println("%move: Invalid move"); 
+                    keepJumping = false; 
+                    blackTurn = false;
+                }
             }
+        }
     }
-}
+
+
     /*
      * Removes a point from list of points. list.remove(point) was not working 
      */
@@ -1274,51 +1268,6 @@ public Board(int size){
 
     }
 
-    public ArrayList<Point> getWhitePosList() {
-        return this.whitePosList;
-    }
-    public void setWhitePosList(ArrayList<Point> whitePosList) {
-        this.whitePosList = whitePosList;
-    }
-    public ArrayList<Point> getBlackPosList() {
-        return this.blackPosList;
-    }
-    public void setBlackPosList(ArrayList<Point> blackPosList) {
-        this.blackPosList = blackPosList;
-    }
-    public Piece[][] getBoard(){
-        return board;
-    }
-    public void setBoard(Piece[][] board){
-        this.board = board;
-    }
-    public static void printBoardState(Piece[][] board){
-        for (int r = 0; r<4; r++){
-            for (int c = 0; c<4; c++){
-                if(board[r][c] == null){
-                    System.out.print(" null ");
-                }else{
-                    System.out.print(board[r][c].getX() + "," + board[r][c].getY());
-                }
-            }
-            System.out.println();
-        }
-    }
-    public ArrayList<Point> getWhiteKingList() {
-        return this.whiteKingList;
-    }
-    public void setWhiteKingList(ArrayList<Point> whiteKingList) {
-        this.whiteKingList = whiteKingList;
-    }
-    public ArrayList<Point> getBlackKingList() {
-        return this.blackKingList;        }
-    public void setBlackKingList(ArrayList<Point> blackKingList) {
-            this.blackKingList = blackKingList;
-        }
-    public boolean isBlackTurn(){
-        return blackTurn;
-    }
-
     /*
     Returns arraylist of all board states 1 move deep
     */
@@ -1327,8 +1276,8 @@ public Board(int size){
         for(int i = 0; i<DIM; i++){
             for(int j= 0; j<DIM; j++){
                 Point p = new Point(i,j);
-                if(getPiece(p)!=null){
-                    ArrayList<Point> temp_moves = getMoves(getPiece(p));//get all possible moves for piece
+                if(getPiece(p)!=null){ //there is a piece at (i,j)
+                    ArrayList<Point> temp_moves = getMoves(getPiece(p));//get all possible moves for piece at (i,j)
                     for(int k = 0; k<temp_moves.size(); k++){
                         Board b = setBoardWithMove(this, getPiece(p), temp_moves.get(k)); //generate board with move k played
                         list.add(b);
@@ -1399,5 +1348,59 @@ public Board(int size){
         return moves;
     }
 
+    public int getUtilValue(){
+        return utilValue;
+    }
 
+    public void setUtilValue(int v){
+        utilValue = v;
+    }
+
+    //GETTERS and SETTERS
+    public ArrayList<Point> getWhitePosList() {
+        return this.whitePosList;
+    }
+    public void setWhitePosList(ArrayList<Point> whitePosList) {
+        this.whitePosList = whitePosList;
+    }
+    public ArrayList<Point> getBlackPosList() {
+        return this.blackPosList;
+    }
+    public void setBlackPosList(ArrayList<Point> blackPosList) {
+        this.blackPosList = blackPosList;
+    }
+    public Piece[][] getBoard(){
+        return board;
+    }
+    public void setBoard(Piece[][] board){
+        this.board = board;
+    }
+    public static void printBoardState(Piece[][] board){
+        for (int r = 0; r<4; r++){
+            for (int c = 0; c<4; c++){
+                if(board[r][c] == null){
+                    System.out.print(" null ");
+                }else{
+                    System.out.print(board[r][c].getX() + "," + board[r][c].getY());
+                }
+            }
+            System.out.println();
+        }
+    }
+    public ArrayList<Point> getWhiteKingList() {
+        return this.whiteKingList;
+    }
+    public void setWhiteKingList(ArrayList<Point> whiteKingList) {
+        this.whiteKingList = whiteKingList;
+    }
+    public ArrayList<Point> getBlackKingList() {
+        return this.blackKingList;        }
+    public void setBlackKingList(ArrayList<Point> blackKingList) {
+            this.blackKingList = blackKingList;
+        }
+    public boolean isBlackTurn(){
+        return blackTurn;
+    }
+
+    
 }
