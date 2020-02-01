@@ -10,11 +10,21 @@ public class Start {
         String m = "";
         int move = 1;
 
-        //getChildren test
-        ArrayList<Board> children = b1.getChildren();
-        // for(int i = 0; i<children.size(); i++){
+        //getChildren in minimax test
+        // MinimaxAI AI = new MinimaxAI();
+        // ArrayList<Board> children = AI.getChildren(b1);
+        // System.out.println("Number of children: " + children.size());
+        // for(int i = 0; i<3; i++){
         //     children.get(i).drawBoard();
         // }
+
+
+        //getChildren in board test
+        ArrayList<Board> children = b1.getChildren();
+        System.out.println("Number of children: " + children.size());
+        for(int i = 0; i<children.size(); i++){
+            children.get(i).drawBoard();
+        }
         
         // while(!m.equals("quit")){
         //     if(b1.getWhitePosList().isEmpty()){
@@ -30,7 +40,7 @@ public class Start {
         //         m = sc.next();
         //         if(m.equals("quit")) System.exit(0);
         //         String pieceStr = m.substring(0,2);
-        //         System.out.println("sub is " + pieceStr);
+        //         //System.out.println("sub is " + pieceStr);
         //         if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
         //             System.out.print("Black's turn, try again: ");
         //         }
@@ -40,7 +50,7 @@ public class Start {
         //         else{
         //             b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
         //             move++;
-        //             System.out.println("\n");
+        //             //System.out.println("\n");
         //             b1.drawBoard();
         //         }
         //         // String pieceStr = m.substring(0,2);

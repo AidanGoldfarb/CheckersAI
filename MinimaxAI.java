@@ -73,11 +73,96 @@ public class MinimaxAI{
 		else if(b.getBlackPosList().isEmpty()){
 			return true;
 		}
-		else if(b.getBlackPosList().size() == 1 && b.getWhitePosList().size() == 1){
+		else if(b.getBlackPosList().size() == 1 && b.getWhitePosList().size() == 1){ //and cant capture on the nexdt move
 			return true;
 		}
 		else{
 			return false;
 		}
 	}
+
+	// /*
+ //    Returns arraylist of all board states 1 move deep
+ //    */
+ //    public ArrayList<Board> getChildren(Board b){
+ //        ArrayList<Board> list = new ArrayList<Board>();
+ //        for(int i = 0; i<b.getDIM(); i++){
+ //            for(int j= 0; j<b.getDIM(); j++){
+ //                Point p = new Point(i,j);
+ //                if(b.getPiece(p)!=null){ //there is a piece at (i,j)
+ //                    Piece piece = b.getPiece(p);
+ //                    ArrayList<Point> temp_moves = getMoves(b,piece);//get all possible moves for piece at (i,j)
+ //                    System.out.println("temp moves: " + temp_moves);
+ //                    for(int k = 0; k<temp_moves.size(); k++){
+ //                    	Board temp = createDeepCopy(b);
+ //                    	temp = b; //need to make a depp copy of b
+ //                        temp = setBoardWithMove(temp, piece, temp_moves.get(k)); //generate board with move k played
+ //                        list.add(temp);
+ //                    }
+ //                }
+ //            }
+ //        }
+ //        return list;
+ //    }
+
+    // /*
+    // Given a board state and a point
+    // */
+    // public Board setBoardWithMove(Board b, Piece piece, Point p){
+    //     System.out.println("Piece: " + piece);
+    //     Board resBoard = b;
+    //     int pX = piece.getX();
+    //     int pY = piece.getY();
+    //     String from = b.pointToCord(new Point(pX, pY));
+    //     String to = b.pointToCord(p);
+    //     String cat = "";
+    //     if(Math.abs(pX-p.getX()) == 1 && Math.abs(pY-p.getY()) == 1){
+    //         cat = from+"-"+to;
+    //     }
+    //     else if(Math.abs(pX-p.getX()) == 2 && Math.abs(pY-p.getY()) == 2){
+    //         cat = from+"x"+to;
+    //     }
+    //     System.out.println("CAT: " + cat);
+    //     resBoard.move(cat,resBoard.getWhitePosList(), resBoard.getBlackPosList());
+    //     return resBoard;
+    // }
+
+    // public ArrayList<Point> getMoves(Board b, Piece p){
+    //     ArrayList<Point> moves = new ArrayList<Point>();
+    //     int x = p.getX();
+    //     int y = p.getY();
+    //     Point p1 = new Point(x-1, y-1);
+    //     Point p2 = new Point(x-1, y+1);
+    //     Point p3 = new Point(x+1, y-1);
+    //     Point p4 = new Point(x+1, y+1);
+    //     Point p5 = new Point(x-2, y-2);
+    //     Point p6 = new Point(x-2, y+2);
+    //     Point p7 = new Point(x+2, y-2);
+    //     Point p8 = new Point(x+2, y+2);
+    //     if(b.isMoveLegal(p,p1)){
+    //         moves.add(p1);
+    //     }
+    //     if(b.isMoveLegal(p,p2)){
+    //         moves.add(p2);
+    //     }
+    //     if(b.isMoveLegal(p,p3)){
+    //         moves.add(p3);
+    //     }
+    //     if(b.isMoveLegal(p,p4)){
+    //         moves.add(p4);
+    //     }
+    //     if(b.canCapture(p)!= null && b.canCapture(p).getX() == p5.getX() && b.canCapture(p).getY() == p5.getY()){
+    //         moves.add(p5);
+    //     }
+    //     if(b.canCapture(p)!= null && b.canCapture(p).getX() == p6.getX() && b.canCapture(p).getY() == p6.getY()){
+    //         moves.add(p6);
+    //     }
+    //     if(b.canCapture(p)!= null && b.canCapture(p).getX() == p7.getX() && b.canCapture(p).getY() == p7.getY()){
+    //         moves.add(p7);
+    //     }
+    //     if(b.canCapture(p)!= null && b.canCapture(p).getX() == p8.getX() && b.canCapture(p).getY() == p8.getY()){
+    //         moves.add(p8);
+    //     }
+    //     return moves;
+    // }
 }

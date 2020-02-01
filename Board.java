@@ -8,11 +8,12 @@ public class Board {
     private ArrayList<Point> whiteKingList;
     private ArrayList<Point> blackKingList;
     private ArrayList<Point> jumpedPiece;
-    private boolean blackTurn = true;
+    private boolean blackTurn;
     private int utilValue = Integer.MIN_VALUE;
 
     public Board(int size){
         DIM = size;
+        blackTurn = true;
         board = new Piece [DIM][DIM];
         whitePosList = new ArrayList<Point>();
         blackPosList = new ArrayList<Point>();
@@ -1277,9 +1278,13 @@ public class Board {
             for(int j= 0; j<DIM; j++){
                 Point p = new Point(i,j);
                 if(getPiece(p)!=null){ //there is a piece at (i,j)
-                    ArrayList<Point> temp_moves = getMoves(getPiece(p));//get all possible moves for piece at (i,j)
+                    Piece piece = getPiece(p);
+                    ArrayList<Point> temp_moves = getMoves(piece);//get all possible moves for piece at (i,j)
+                    System.out.println("temp moves: " + temp_moves);
                     for(int k = 0; k<temp_moves.size(); k++){
-                        Board b = setBoardWithMove(this, getPiece(p), temp_moves.get(k)); //generate board with move k played
+                        //instead of 'this', need to make a deep copy of 'this'
+                        Board b = deepCopy(this);
+                        b = setBoardWithMove(b, piece, temp_moves.get(k)); //generate board with move k played
                         list.add(b);
                     }
                 }
@@ -1288,10 +1293,26 @@ public class Board {
         return list;
     }
 
+    public Board deepCopy(Board b){
+        int d = b.getDIM();
+        Board res = new Board(d);
+        Piece [][] arr = b.getBoard();
+        Piece [][] res_arr = new Piece [d][d];
+        for(int r = 0; r<d; r++){
+            for(int c = 0; c<d; c++){
+                res_arr[r][c] = arr[r][c];
+            }
+        }
+        res.setBoard(res_arr);
+        res.silentDrawBoard();
+        return res;
+    }
+
     /*
     Given a board state and a point
     */
     public Board setBoardWithMove(Board b, Piece piece, Point p){
+        System.out.println("Piece: " + piece);
         Board resBoard = b;
         int pX = piece.getX();
         int pY = piece.getY();
@@ -1352,6 +1373,9 @@ public class Board {
     
 
     //GETTERS and SETTERS
+    public int getDIM(){
+        return DIM;
+    }
     public int getUtilValue(){
         return utilValue;
     }
