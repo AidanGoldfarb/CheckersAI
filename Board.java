@@ -216,7 +216,7 @@ public class Board {
                 }
             }
             
-            System.out.println();
+            //System.out.println();
         }
     }
     /*
@@ -224,7 +224,7 @@ public class Board {
      */
     public boolean isOccupied(int x, int y){
         if(x >= DIM || y >= DIM){
-            System.out.println("OUT OF RANGE");
+            //System.out.println("OUT OF RANGE");
             return false;
         }
         if(inRange(x) && inRange(y) && board[x][y] != null){
@@ -330,16 +330,14 @@ public class Board {
                 }
 
                 else{
-                    if((isOccupied(pieceX+1, pieceY+1) && !isOccupied(pieceX+2, pieceY+2)) ){
-                        //removePointFromList(new Point(pieceX+1, pieceY+1) ,whitePosList); //remove jumped piece
+                    if((isOccupied(pieceX+1, pieceY+1) && !isOccupied(pieceX+2, pieceY+2))){
                         if(inRange(pieceX+2) && inRange(pieceY+2)){
                             jumpedPiece.add(new Point((pieceX+1), (pieceY+1)));
                             return new Point(pieceX+2, pieceY+2);
                         }
                     }
                     else if((isOccupied(pieceX+1, pieceY-1) && !isOccupied(pieceX+2, pieceY-2))){
-                        //removePointFromList(new Point(pieceX+1, pieceY-1) ,whitePosList); //remove jumped piece
-                        if(inRange(pieceX-2) && inRange(pieceY+2)){
+                        if(inRange(pieceX+2) && inRange(pieceY-2)){
                             jumpedPiece.add(new Point((pieceX-1), (pieceY-1)));
                             return new Point(pieceX+2, pieceY-2);
                         }
@@ -723,7 +721,7 @@ public class Board {
                 }    return null;
             }
         }
-        System.out.println("%canCapture: failed at end");
+        //System.out.println("%canCapture: failed at end");
         return null;
     }
 
@@ -1144,7 +1142,7 @@ public class Board {
             boolean keepJumping = true;
             if(canCapture(getPiece(p1)) == null){
                 System.out.println("Invalid move can. Capture returned null");
-                System.exit(0);
+                //System.exit(0);
             }
             while(keepJumping){
                 System.out.println((getPiece(p1) != null) + " " +  (canCapture(getPiece(p1)) != null));
@@ -1277,21 +1275,76 @@ public class Board {
         for(int i = 0; i<DIM; i++){
             for(int j= 0; j<DIM; j++){
                 Point p = new Point(i,j);
-                if(getPiece(p)!=null){ //there is a piece at (i,j)
-                    Piece piece = getPiece(p);
-                    ArrayList<Point> temp_moves = getMoves(piece);//get all possible moves for piece at (i,j)
-                    System.out.println("temp moves: " + temp_moves);
-                    for(int k = 0; k<temp_moves.size(); k++){
-                        //instead of 'this', need to make a deep copy of 'this'
-                        Board b = deepCopy(this);
-                        b = setBoardWithMove(b, piece, temp_moves.get(k)); //generate board with move k played
-                        list.add(b);
+                if(blackTurn){
+                    if(getPiece(p)!=null && getPiece(p).getSide().equals("black")){ //there is a piece at (i,j) and its legal to move (correct turn)
+                        Piece piece = getPiece(p);
+                        ArrayList<Point> temp_moves = getMoves(piece);//get all possible moves for piece at (i,j)
+                        System.out.println("temp moves: " + temp_moves);
+                        for(int k = 0; k<temp_moves.size(); k++){
+                            //instead of 'this', need to make a deep copy of 'this'
+                            //Board b = deepCopyW(this);
+                            Board b = deepCopy(this);
+                            b = setBoardWithMove(b, piece, temp_moves.get(k)); //generate board with move k played
+                            b.silentDrawBoard();
+                            list.add(b);
+                        }
+                    }
+                }
+                else{
+                    if(getPiece(p)!=null && getPiece(p).getSide().equals("white")){ //there is a piece at (i,j) and its legal to move (correct turn)
+                        Piece piece = getPiece(p);
+                        ArrayList<Point> temp_moves = getMoves(piece);//get all possible moves for piece at (i,j)
+                        System.out.println("temp moves: " + temp_moves);
+                        for(int k = 0; k<temp_moves.size(); k++){
+                            //instead of 'this', need to make a deep copy of 'this'
+                            //Board b = deepCopyB(this);
+                            Board b = deepCopy(this);
+                            b = setBoardWithMove(b, piece, temp_moves.get(k)); //generate board with move k played
+                            b.silentDrawBoard();
+                            list.add(b);
+                        }
                     }
                 }
             }
         }
         return list;
     }
+
+    public Board deepCopyW(Board b){
+        int d = b.getDIM();
+        Board res = new Board(d);
+        Piece [][] arr = b.getBoard();
+        Piece [][] res_arr = new Piece [d][d];
+        for(int r = 0; r<d; r++){
+            for(int c = 0; c<d; c++){
+                res_arr[r][c] = arr[r][c];
+            }
+        }
+        res.setBoard(res_arr);
+        res.setWhitePosList(b.getWhitePosList());
+        res.setWhiteKingList(b.getWhiteKingList());
+        res.silentDrawBoard();
+        return res;
+    }
+    public Board deepCopyB(Board b){
+        int d = b.getDIM();
+        Board res = new Board(d);
+        Piece [][] arr = b.getBoard();
+        Piece [][] res_arr = new Piece [d][d];
+        for(int r = 0; r<d; r++){
+            for(int c = 0; c<d; c++){
+                res_arr[r][c] = arr[r][c];
+            }
+        }
+        res.setBoard(res_arr);
+        //res.setWhitePosList(b.getWhitePosList());
+        res.setBlackPosList(b.getBlackPosList());
+        res.setBlackKingList(b.getBlackKingList());
+        res.silentDrawBoard();
+        return res;
+    }
+
+
 
     public Board deepCopy(Board b){
         int d = b.getDIM();
@@ -1304,6 +1357,8 @@ public class Board {
             }
         }
         res.setBoard(res_arr);
+        // res.setWhitePosList(b.getWhitePosList());
+        // res.setBlackPosList(b.getBlackPosList());
         res.silentDrawBoard();
         return res;
     }
@@ -1327,6 +1382,7 @@ public class Board {
         }
         System.out.println("CAT: " + cat);
         resBoard.move(cat,resBoard.getWhitePosList(), resBoard.getBlackPosList());
+        resBoard.silentDrawBoard();
         return resBoard;
     }
 
@@ -1423,6 +1479,9 @@ public class Board {
     public void setBlackKingList(ArrayList<Point> blackKingList) {
             this.blackKingList = blackKingList;
         }
+    public void setBlackTurn(boolean b){
+        blackTurn = b;
+    }
     public boolean isBlackTurn(){
         return blackTurn;
     }

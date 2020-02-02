@@ -3,72 +3,140 @@ import java.util.Scanner;
 public class Start {
     public static void main(String [] args){
         Scanner sc = new Scanner(System.in);
+
         final int size = 4;
-        Board b1 = new Board(size);
+        Board b = new Board(4);
+        b.drawBoard();
+
+        // b.move("A4-B3",b.getWhitePosList(),b.getBlackPosList());
+        // b.drawBoard();
+        // ArrayList<Board> list = b.getChildren();
+        // for(int i = 0; i<list.size(); i++){
+        //     list.get(i).drawBoard();
+        // }
+
+        // b.setBlackTurn(false);
+        // b.drawBoard();
+        MinimaxAI ai = new MinimaxAI();
+        Board new_board = ai.minimax_decision(b);
+        new_board.drawBoard();
+
+        // new_board2 = ai.minimax_decision(new_board);
+        // new_board2.drawBoard();
+        // printBoardState(new_board2.getBoard());
+        
+
+
+        // System.out.print("0 for PvP, 1 for PvC: ");
+        // int input = sc.nextInt();
+        // if(input == 0){
+        //     pvp();
+        // }
+        // else if(input == 1){
+        //     pvc();
+        // }
+
+
+    }
+
+    public static void pvc(){
+        Scanner sc = new Scanner(System.in);
+        Board b1 = new Board(4);
+        b1.setBlackTurn(false);
+        MinimaxAI ai = new MinimaxAI();
         b1.drawBoard();
-        //loadInitialBoard(b1, size);
         String m = "";
         int move = 1;
-
-        //getChildren in minimax test
-        // MinimaxAI AI = new MinimaxAI();
-        // ArrayList<Board> children = AI.getChildren(b1);
-        // System.out.println("Number of children: " + children.size());
-        // for(int i = 0; i<3; i++){
-        //     children.get(i).drawBoard();
-        // }
-
-
-        //getChildren in board test
-        ArrayList<Board> children = b1.getChildren();
-        System.out.println("Number of children: " + children.size());
-        for(int i = 0; i<children.size(); i++){
-            children.get(i).drawBoard();
+        while(!m.equals("quit")){
+            if(b1.getWhitePosList().isEmpty()){
+                System.out.println("Black wins!");
+                System.exit(0);
+            }
+            else if(b1.getBlackPosList().isEmpty()){
+                System.out.println("White wins!");
+                System.exit(0);
+            }
+            else{
+                if(b1.isBlackTurn()){
+                    System.out.print("Enter a move: ");
+                    m = sc.next();
+                    if(m.equals("quit")) System.exit(0);
+                    String pieceStr = m.substring(0,2);
+                    if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
+                        System.out.print("Black's turn, try again: ");
+                    }
+                    else if(!b1.isBlackTurn() && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
+                        System.out.print("White's turn, try again: ");
+                    }
+                    else{
+                        b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
+                        move++;
+                        System.out.println("\n");
+                        b1.drawBoard();
+                    }
+                }
+                else{
+                    Board new_board = ai.minimax_decision(b1);
+                    b1 = deepCopy(new_board);
+                    new_board.drawBoard();
+                    //b1.drawBoard();
+                }
+            }
         }
-        
-        // while(!m.equals("quit")){
-        //     if(b1.getWhitePosList().isEmpty()){
-        //         System.out.println("Black wins!");
-        //         System.exit(0);
-        //     }
-        //     else if(b1.getBlackPosList().isEmpty()){
-        //         System.out.println("White wins!");
-        //         System.exit(0);
-        //     }
-        //     else{
-        //         System.out.print("Enter a move: ");
-        //         m = sc.next();
-        //         if(m.equals("quit")) System.exit(0);
-        //         String pieceStr = m.substring(0,2);
-        //         //System.out.println("sub is " + pieceStr);
-        //         if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
-        //             System.out.print("Black's turn, try again: ");
-        //         }
-        //         else if(!b1.isBlackTurn() && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
-        //             System.out.print("White's turn, try again: ");
-        //         }
-        //         else{
-        //             b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
-        //             move++;
-        //             //System.out.println("\n");
-        //             b1.drawBoard();
-        //         }
-        //         // String pieceStr = m.substring(0,2);
-        //         // System.out.println("sub is " + pieceStr);
-        //         // if(move%2 != 0 && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
-        //         //     System.out.print("Black's turn, try again: ");
-        //         // }
-        //         // else if(move%2 == 0 && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
-        //         //     System.out.print("White's turn, try again: ");
-        //         // }
-        //         // else{
-        //         //     b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
-        //         //     move++;
-        //         //     System.out.println("\n");
-        //         //     b1.drawBoard();
-        //         // }
-        //     }
-        // }
+    }
+
+    public static Board deepCopy(Board b){
+        int d = b.getDIM();
+        Board res = new Board(d);
+        Piece [][] arr = b.getBoard();
+        Piece [][] res_arr = new Piece [d][d];
+        for(int r = 0; r<d; r++){
+            for(int c = 0; c<d; c++){
+                res_arr[r][c] = arr[r][c];
+            }
+        }
+        res.setBoard(res_arr);
+        res.setWhitePosList(b.getWhitePosList());
+        res.setBlackPosList(b.getBlackPosList());
+        res.silentDrawBoard();
+        return res;
+    }
+
+    public static void pvp(){
+        Scanner sc = new Scanner(System.in);
+        Board b1 = new Board(4);
+        b1.drawBoard();
+        String m = "";
+        int move = 1;
+        while(!m.equals("quit")){
+            if(b1.getWhitePosList().isEmpty()){
+                System.out.println("Black wins!");
+                System.exit(0);
+            }
+            else if(b1.getBlackPosList().isEmpty()){
+                System.out.println("White wins!");
+                System.exit(0);
+            }
+            else{
+                System.out.print("Enter a move: ");
+                m = sc.next();
+                if(m.equals("quit")) System.exit(0);
+                String pieceStr = m.substring(0,2);
+                //System.out.println("sub is " + pieceStr);
+                if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
+                    System.out.print("Black's turn, try again: ");
+                }
+                else if(!b1.isBlackTurn() && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
+                    System.out.print("White's turn, try again: ");
+                }
+                else{
+                    b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
+                    move++;
+                    System.out.println("\n");
+                    b1.drawBoard();
+                }
+            }
+        }
     }
 
     public static void loadInitialBoard(Board b, int dim){

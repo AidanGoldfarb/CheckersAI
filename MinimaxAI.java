@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 public class MinimaxAI{
 
-	public MinimaxAI(){
+	private int depth;
 
+	public MinimaxAI(){
+		depth = 0;
 	}
 
 	public Board minimax_decision(Board b){
@@ -48,9 +50,10 @@ public class MinimaxAI{
 		int v = Integer.MAX_VALUE;
 		ArrayList<Board> actions = b.getChildren();
 		for(int i = 0; i<actions.size(); i++){
-			v = Math.min(v, min_value(actions.get(i)));
+			v = Math.min(v, max_value(actions.get(i)));
 			actions.get(i).setUtilValue(v);
 		}
+		System.out.println("depth: " + depth++);
 		return v;
 	}
 
