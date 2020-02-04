@@ -10,20 +10,21 @@ public class Start {
 
         // b.move("A4-B3",b.getWhitePosList(),b.getBlackPosList());
         // b.drawBoard();
+        // printBoardState(b.getBoard());
         // ArrayList<Board> list = b.getChildren();
         // for(int i = 0; i<list.size(); i++){
         //     list.get(i).drawBoard();
         // }
 
-        // b.setBlackTurn(false);
-        // b.drawBoard();
-        MinimaxAI ai = new MinimaxAI();
-        Board new_board = ai.minimax_decision(b);
-        new_board.drawBoard();
+        // b.setBlackTurn(false); //makes it white(X) to move first
 
-        // new_board2 = ai.minimax_decision(new_board);
-        // new_board2.drawBoard();
-        // printBoardState(new_board2.getBoard());
+        MinimaxAI ai = new MinimaxAI(); //initialize minimax object
+        Board new_board = ai.minimax_decision(b); 
+        new_board.drawBoard(); //draws board, and updates board[][] values 
+
+        // Board new_board2 = ai.minimax_decision(deepCopy(new_board)); //same thing, attempting to use deepCopy
+        // new_board2.drawBoard(); //draw and update
+        // printBoardState(new_board2.getBoard()); //iterates through board[][], prints null if no piece is found, otherwise prints the point
         
 
 
@@ -98,6 +99,7 @@ public class Start {
         res.setBoard(res_arr);
         res.setWhitePosList(b.getWhitePosList());
         res.setBlackPosList(b.getBlackPosList());
+        res.setBlackTurn(b.isBlackTurn());
         res.silentDrawBoard();
         return res;
     }

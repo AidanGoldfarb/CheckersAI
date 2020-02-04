@@ -62,6 +62,7 @@ public class Board {
     draws board given two arrays. each contain points where pieces are
     */
     public void drawBoard(){
+        System.out.println();
         int x = 0, y = 0;
         for(int i = 0; i<=2*DIM; i++){
             for(int j = 0; j<=2*DIM; j++){
@@ -1281,11 +1282,9 @@ public class Board {
                         ArrayList<Point> temp_moves = getMoves(piece);//get all possible moves for piece at (i,j)
                         System.out.println("temp moves: " + temp_moves);
                         for(int k = 0; k<temp_moves.size(); k++){
-                            //instead of 'this', need to make a deep copy of 'this'
-                            //Board b = deepCopyW(this);
                             Board b = deepCopy(this);
                             b = setBoardWithMove(b, piece, temp_moves.get(k)); //generate board with move k played
-                            b.silentDrawBoard();
+                            //b.silentDrawBoard();
                             list.add(b);
                         }
                     }
@@ -1296,11 +1295,9 @@ public class Board {
                         ArrayList<Point> temp_moves = getMoves(piece);//get all possible moves for piece at (i,j)
                         System.out.println("temp moves: " + temp_moves);
                         for(int k = 0; k<temp_moves.size(); k++){
-                            //instead of 'this', need to make a deep copy of 'this'
-                            //Board b = deepCopyB(this);
                             Board b = deepCopy(this);
                             b = setBoardWithMove(b, piece, temp_moves.get(k)); //generate board with move k played
-                            b.silentDrawBoard();
+                            //b.silentDrawBoard();
                             list.add(b);
                         }
                     }
@@ -1323,6 +1320,7 @@ public class Board {
         res.setBoard(res_arr);
         res.setWhitePosList(b.getWhitePosList());
         res.setWhiteKingList(b.getWhiteKingList());
+        res.setBlackTurn(b.isBlackTurn());
         res.silentDrawBoard();
         return res;
     }
@@ -1340,12 +1338,10 @@ public class Board {
         //res.setWhitePosList(b.getWhitePosList());
         res.setBlackPosList(b.getBlackPosList());
         res.setBlackKingList(b.getBlackKingList());
+        res.setBlackTurn(b.isBlackTurn());
         res.silentDrawBoard();
         return res;
     }
-
-
-
     public Board deepCopy(Board b){
         int d = b.getDIM();
         Board res = new Board(d);
@@ -1357,18 +1353,30 @@ public class Board {
             }
         }
         res.setBoard(res_arr);
-        // res.setWhitePosList(b.getWhitePosList());
+        //commenting all 4 lines below causes minimax to 'work'
+        // res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
+        // res.setBlackPosList(deepListSet(b.getBlackPosList()));
+        // res.setWhitePosList(b.getWhitePosList());              
         // res.setBlackPosList(b.getBlackPosList());
+        res.setBlackTurn(b.isBlackTurn());
         res.silentDrawBoard();
         return res;
     }
 
+    public ArrayList<Point> deepListSet(ArrayList<Point> list){
+        ArrayList<Point> res = new ArrayList<Point>();
+        int len = list.size();
+        for(int i = 0; i<len; i++){
+            res.add(list.get(i));
+        }
+        return res;
+    }
     /*
     Given a board state and a point
     */
     public Board setBoardWithMove(Board b, Piece piece, Point p){
         System.out.println("Piece: " + piece);
-        Board resBoard = b;
+        Board resBoard = deepCopy(b);
         int pX = piece.getX();
         int pY = piece.getY();
         String from = pointToCord(new Point(pX, pY));
@@ -1451,7 +1459,7 @@ public class Board {
         this.blackPosList = blackPosList;
     }
     public Piece[][] getBoard(){
-        return board;
+        return board; //should return deep copy?
     }
     public void setBoard(Piece[][] board){
         this.board = board;
