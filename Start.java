@@ -5,37 +5,42 @@ public class Start {
         Scanner sc = new Scanner(System.in);
 
         final int size = 4;
-        Board b = new Board(4);
+        Board b = new Board(size);
         b.drawBoard();
 
         // b.move("A4-B3",b.getWhitePosList(),b.getBlackPosList());
+        // b.drawBoard();
+        // b.move("D1-C2", b.getWhitePosList(),b.getBlackPosList());
         // b.drawBoard();
         // printBoardState(b.getBoard());
         // ArrayList<Board> list = b.getChildren();
         // for(int i = 0; i<list.size(); i++){
         //     list.get(i).drawBoard();
+        //     printBoardState(list.get(i).getBoard());
         // }
 
-        // b.setBlackTurn(false); //makes it white(X) to move first
+        //b.setBlackTurn(false); //makes it white(X) to move first
 
-        MinimaxAI ai = new MinimaxAI(); //initialize minimax object
-        Board new_board = ai.minimax_decision(b); 
-        new_board.drawBoard(); //draws board, and updates board[][] values 
+        // MinimaxAI ai = new MinimaxAI(); //initialize minimax object
+        // Board new_board = ai.minimax_decision(b); 
+        // new_board.drawBoard(); //draws board, and updates board[][] values 
+        // printBoardState(new_board.getBoard());
 
-        // Board new_board2 = ai.minimax_decision(deepCopy(new_board)); //same thing, attempting to use deepCopy
+        // Board new_board2 = ai.minimax_decision(new_board); //same thing, attempting to use deepCopy
         // new_board2.drawBoard(); //draw and update
         // printBoardState(new_board2.getBoard()); //iterates through board[][], prints null if no piece is found, otherwise prints the point
+        // System.out.println(new_board2.getBlackPosList());
         
 
 
-        // System.out.print("0 for PvP, 1 for PvC: ");
-        // int input = sc.nextInt();
-        // if(input == 0){
-        //     pvp();
-        // }
-        // else if(input == 1){
-        //     pvc();
-        // }
+        System.out.print("0 for PvP, 1 for PvC: ");
+        int input = sc.nextInt();
+        if(input == 0){
+            pvp();
+        }
+        else if(input == 1){
+            pvc();
+        }
 
 
     }
@@ -43,7 +48,6 @@ public class Start {
     public static void pvc(){
         Scanner sc = new Scanner(System.in);
         Board b1 = new Board(4);
-        b1.setBlackTurn(false);
         MinimaxAI ai = new MinimaxAI();
         b1.drawBoard();
         String m = "";
@@ -97,8 +101,10 @@ public class Start {
             }
         }
         res.setBoard(res_arr);
-        res.setWhitePosList(b.getWhitePosList());
-        res.setBlackPosList(b.getBlackPosList());
+        res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
+        res.setBlackPosList(deepListSet(b.getBlackPosList()));
+        // res.setWhitePosList(b.getWhitePosList());
+        // res.setBlackPosList(b.getBlackPosList());
         res.setBlackTurn(b.isBlackTurn());
         res.silentDrawBoard();
         return res;
@@ -257,7 +263,14 @@ public class Start {
             System.out.println();
         }
     }
-
+    public static ArrayList<Point> deepListSet(ArrayList<Point> list){
+        ArrayList<Point> res = new ArrayList<Point>();
+        int len = list.size();
+        for(int i = 0; i<len; i++){
+            res.add(list.get(i));
+        }
+        return res;
+    }
     
 
     

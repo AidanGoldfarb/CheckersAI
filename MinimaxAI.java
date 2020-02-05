@@ -4,7 +4,7 @@ public class MinimaxAI{
 	private int depth;
 
 	public MinimaxAI(){
-		depth = 0;
+		depth = -1;
 	}
 
 	public Board minimax_decision(Board b){
@@ -15,20 +15,9 @@ public class MinimaxAI{
 			if(bestAction.getUtilValue() < minValue){
 				bestAction = actions.get(i);
 			}
-			//bestAction = max_function(bestAction, min_value(actions.get(i)));
 		}
 		return bestAction;
 	}
-
-	// public Board max_function(Board b, int v){
-	// 	int utilValue = b.getUtilValue();
-	// 	if(utilValue >= v){
-	// 		return b;
-	// 	}
-	// 	else{
-
-	// 	}
-	// }
 
 	public int max_value(Board b){
 		if(isTerminal(b)){
@@ -36,6 +25,7 @@ public class MinimaxAI{
 		}
 		int v = Integer.MIN_VALUE;
 		ArrayList<Board> actions = b.getChildren();
+		depth++;
 		for(int i = 0; i<actions.size(); i++){
 			v = Math.max(v, min_value(actions.get(i)));
 			actions.get(i).setUtilValue(v);
@@ -53,7 +43,6 @@ public class MinimaxAI{
 			v = Math.min(v, max_value(actions.get(i)));
 			actions.get(i).setUtilValue(v);
 		}
-		System.out.println("depth: " + depth++);
 		return v;
 	}
 
@@ -70,7 +59,7 @@ public class MinimaxAI{
 	}
 
 	public boolean isTerminal(Board b){
-		if(b.getWhitePosList().isEmpty()){
+		if(b.getWhitePosList().isEmpty() || depth == 50){
 			return true;
 		}
 		else if(b.getBlackPosList().isEmpty()){
@@ -95,11 +84,22 @@ public class MinimaxAI{
             }
         }
         res.setBoard(res_arr);
+        res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
+        res.setBlackPosList(deepListSet(b.getBlackPosList()));
         // res.setWhitePosList(b.getWhitePosList());
         // res.setBlackPosList(b.getBlackPosList());
         res.setBlackTurn(b.isBlackTurn());
         res.silentDrawBoard();
         return res;
+    }
+
+    public ArrayList<Point> deepListSet(ArrayList<Point> list){
+	    ArrayList<Point> res = new ArrayList<Point>();
+	    int len = list.size();
+	    for(int i = 0; i<len; i++){
+	        res.add(list.get(i));
+	    }
+	    return res;
     }
 
 }

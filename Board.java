@@ -183,7 +183,7 @@ public class Board {
                             //System.out.print(p + " ");
                         }
                         else{
-                            System.out.print(getPiece(new Point(x,y)) + " ");
+                            //System.out.print(getPiece(new Point(x,y)) + " ");
                         }
                         
                         
@@ -250,7 +250,6 @@ public class Board {
      */
     public Point canCapture(Piece piece){
         silentDrawBoard();
-        //System.out.println();
         if(piece == null){
             System.out.println("piece == null in canCapture");
             System.exit(0);
@@ -267,7 +266,7 @@ public class Board {
                 }
                 else if(pieceY == 0){
                     //just check (x-1,1) and (x-2,2)
-                    if(isOccupied(pieceX-1, pieceY+1) && !isOccupied(pieceX-2, pieceY+2)){
+                    if(isOccupied(pieceX-1, pieceY+1) && !isOccupied(pieceX-2, pieceY+2) && getPiece(new Point(pieceX-1, pieceY+1)).getSide().equals("black")){
                         if(inRange(pieceX-2) && inRange(pieceY+2)){
                             jumpedPiece.add(new Point((pieceX-1), (pieceY+1)));
                             return p = new Point(pieceX-2, pieceY+2);
@@ -276,7 +275,7 @@ public class Board {
                 }
                 else if(pieceY == DIM-1){
                     //just check (x-1,DIM-2) and (x-2,DIM-3)
-                    if(isOccupied(pieceX-1, pieceY-1) && !isOccupied(pieceX-2, pieceY-2)){
+                    if(isOccupied(pieceX-1, pieceY-1) && !isOccupied(pieceX-2, pieceY-2) && getPiece(new Point(pieceX-1, pieceY-1)).getSide().equals("black")){
                         if(inRange(pieceX-2) && inRange(pieceY-2)){
                             jumpedPiece.add(new Point(pieceX-1, pieceY-1)); //remove jumped piece
                             return p = new Point(pieceX-2, pieceY-2);
@@ -285,15 +284,13 @@ public class Board {
                 }
                 else{
                     //check both directions
-                    if((isOccupied(pieceX-1, pieceY+1) && !isOccupied(pieceX-2, pieceY+2)) ){
-                        //System.out.println("Removing (" + (pieceX-1) + "," + (pieceY+1) + ")");
-                        //removePointFromList(new Point((pieceX-1), (pieceY+1)) ,blackPosList); //remove jumped piece
+                    if(isOccupied(pieceX-1, pieceY+1) && !isOccupied(pieceX-2, pieceY+2) && getPiece(new Point(pieceX-1, pieceY+1)).getSide().equals("black")){
                         if(inRange(pieceX-2) && inRange(pieceY+2)){
                             jumpedPiece.add(new Point((pieceX-1), (pieceY+1)));
                             return p = new Point(pieceX-2, pieceY+2);
                         }
                     }
-                    else if((isOccupied(pieceX-1, pieceY-1) && !isOccupied(pieceX-2, pieceY-2))){
+                    else if(isOccupied(pieceX-1, pieceY-1) && !isOccupied(pieceX-2, pieceY-2) && getPiece(new Point(pieceX-1, pieceY-1)).getSide().equals("black")){
                         //removePointFromList(new Point(pieceX-1, pieceY-1) ,blackPosList); //remove jumped piece
                         if(inRange(pieceX-2) && inRange(pieceY-2)){
                             jumpedPiece.add(new Point((pieceX-1), (pieceY-1)));
@@ -311,7 +308,7 @@ public class Board {
                 }
 
                 else if(pieceY == 0){
-                    if(isOccupied(pieceX+1, pieceY+1) && !isOccupied(pieceX+2, pieceY+2)){
+                    if(isOccupied(pieceX+1, pieceY+1) && !isOccupied(pieceX+2, pieceY+2) && getPiece(new Point(pieceX+1, pieceY+1)).getSide().equals("white")){
                         //removePointFromList(new Point(pieceX+1, pieceY+1) ,whitePosList); //remove jumped piece
                         if(inRange(pieceX+2) && inRange(pieceY+2)){
                             jumpedPiece.add(new Point((pieceX+1), (pieceY+1)));
@@ -321,7 +318,7 @@ public class Board {
                 }
 
                 else if(pieceY == DIM-1){
-                    if(isOccupied(pieceX+1, pieceY-1) && !isOccupied(pieceX+2, pieceY-2)){
+                    if(isOccupied(pieceX+1, pieceY-1) && !isOccupied(pieceX+2, pieceY-2) && getPiece(new Point(pieceX+1, pieceY-1)).getSide().equals("white")){
                         //removePointFromList(new Point(pieceX+1, pieceY-1) ,whitePosList); //remove jumped piece
                         if(inRange(pieceX+2) && inRange(pieceY-2)){
                             jumpedPiece.add(new Point((pieceX+1), (pieceY-1)));
@@ -331,13 +328,13 @@ public class Board {
                 }
 
                 else{
-                    if((isOccupied(pieceX+1, pieceY+1) && !isOccupied(pieceX+2, pieceY+2))){
+                    if(isOccupied(pieceX+1, pieceY+1) && !isOccupied(pieceX+2, pieceY+2) && getPiece(new Point(pieceX+1, pieceY+1)).getSide().equals("white")){
                         if(inRange(pieceX+2) && inRange(pieceY+2)){
                             jumpedPiece.add(new Point((pieceX+1), (pieceY+1)));
                             return new Point(pieceX+2, pieceY+2);
                         }
                     }
-                    else if((isOccupied(pieceX+1, pieceY-1) && !isOccupied(pieceX+2, pieceY-2))){
+                    else if(isOccupied(pieceX+1, pieceY-1) && !isOccupied(pieceX+2, pieceY-2) && getPiece(new Point(pieceX+1, pieceY-1)).getSide().equals("white")){
                         if(inRange(pieceX+2) && inRange(pieceY-2)){
                             jumpedPiece.add(new Point((pieceX-1), (pieceY-1)));
                             return new Point(pieceX+2, pieceY-2);
@@ -346,7 +343,7 @@ public class Board {
                     else{
                         return null;
                     }
-                }
+                } 
             }
         }
         else{//King piece //}
@@ -356,7 +353,7 @@ public class Board {
                     int y1 = pieceY+1;
                     int x2 = pieceX+2;
                     int y2 = pieceY+2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
@@ -368,7 +365,7 @@ public class Board {
                     int y1 = pieceY-1;
                     int x2 = pieceX+2;
                     int y2 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("black")){
                         //removePointFromList(new Point(x1,y1) ,blackPosList); //removed jumped piece
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
@@ -381,7 +378,7 @@ public class Board {
                     int y1 = pieceY-1;
                     int x2 = pieceX-2;
                     int y2 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
@@ -393,7 +390,7 @@ public class Board {
                     int y1 = pieceY+1;
                     int x2 = pieceX-2;
                     int y2 = pieceY+2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
@@ -408,13 +405,13 @@ public class Board {
 
                     int y3 = pieceY-1;
                     int y4 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
                         }
                     }
-                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4)){
+                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4) && getPiece(new Point(x1, y3)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y4)){
                             jumpedPiece.add(new Point((x1), (y3)));
                             return new Point(x2,y4);
@@ -429,13 +426,13 @@ public class Board {
 
                     int y3 = pieceY-1;
                     int y4 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x2), (y2)));
                             return new Point(x2,y2);
                         }
                     }
-                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4)){
+                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4) && getPiece(new Point(x2, y4)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y4)){
                             jumpedPiece.add(new Point((x1), (y3)));
                             return new Point(x2,y4);
@@ -450,13 +447,13 @@ public class Board {
 
                     int x3 = pieceX+1;
                     int x4 = pieceX+2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
                         }
                     }
-                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2)){
+                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2) && getPiece(new Point(x3, y1)).getSide().equals("black")){
                         if(inRange(x4) && inRange(y2)){
                             jumpedPiece.add(new Point((x3), (y1)));
                             return new Point(x4,y2);
@@ -471,13 +468,13 @@ public class Board {
 
                     int x3 = pieceX+1;
                     int x4 = pieceX+2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
                         }
                     }
-                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2)){
+                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2) && getPiece(new Point(x3, y1)).getSide().equals("black")){
                         if(inRange(x4) && inRange(y2)){
                             jumpedPiece.add(new Point((x3), (y1)));
                             return new Point(x4,y2);
@@ -490,7 +487,7 @@ public class Board {
                     int y1 = pieceY-1;
                     int x2 = pieceX-2;
                     int y2 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
@@ -502,7 +499,7 @@ public class Board {
                     int y3 = pieceY+1;
                     int x4 = pieceX-2;
                     int y4 = pieceY+2;
-                    if(isOccupied(x3, y3) && !isOccupied(x4, y4)){
+                    if(isOccupied(x3, y3) && !isOccupied(x4, y4) && getPiece(new Point(x3, y3)).getSide().equals("black")){
                         if(inRange(x4) && inRange(y4)){
                             jumpedPiece.add(new Point((x3), (y3)));
                             return new Point(x4,y4);
@@ -514,7 +511,7 @@ public class Board {
                     int y5 = pieceY-1;
                     int x6 = pieceX+2;
                     int y6 = pieceY-2;
-                    if(isOccupied(x5, y5) && !isOccupied(x6, y6)){
+                    if(isOccupied(x5, y5) && !isOccupied(x6, y6) && getPiece(new Point(x5, y5)).getSide().equals("black")){
                         if(inRange(x6) && inRange(y6)){
                             jumpedPiece.add(new Point((x5), (y5)));
                             return new Point(x6,y6);
@@ -526,7 +523,7 @@ public class Board {
                     int y7 = pieceY+1;
                     int x8 = pieceX+2;
                     int y8 = pieceY+2;
-                    if(isOccupied(x7, y7) && !isOccupied(x8, y8)){
+                    if(isOccupied(x7, y7) && !isOccupied(x8, y8) && getPiece(new Point(x7, y7)).getSide().equals("black")){
                         if(inRange(x8) && inRange(y8)){
                             jumpedPiece.add(new Point((x7), (y7)));
                             return new Point(x8,y8);
@@ -543,7 +540,7 @@ public class Board {
                     int y1 = pieceY+1;
                     int x2 = pieceX+2;
                     int y2 = pieceY+2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
@@ -555,8 +552,7 @@ public class Board {
                     int y1 = pieceY-1;
                     int x2 = pieceX+2;
                     int y2 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
-                        //removePointFromList(new Point(x1,y1) ,blackPosList); //removed jumped piece
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
@@ -568,7 +564,7 @@ public class Board {
                     int y1 = pieceY-1;
                     int x2 = pieceX-2;
                     int y2 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
@@ -580,7 +576,7 @@ public class Board {
                     int y1 = pieceY+1;
                     int x2 = pieceX-2;
                     int y2 = pieceY+2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
@@ -595,13 +591,13 @@ public class Board {
 
                     int y3 = pieceY-1;
                     int y4 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
                         }
                     }
-                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4)){
+                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4) && getPiece(new Point(x1, y3)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y4)){
                             jumpedPiece.add(new Point((x1), (y3)));
                             return new Point(x2,y4);
@@ -616,13 +612,13 @@ public class Board {
 
                     int y3 = pieceY-1;
                     int y4 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
                         }
                     }
-                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4)){
+                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4) && getPiece(new Point(x1, y3)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y4)){
                             jumpedPiece.add(new Point((x1), (y3)));
                             return new Point(x2,y4);
@@ -637,13 +633,13 @@ public class Board {
 
                     int x3 = pieceX+1;
                     int x4 = pieceX+2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
                         }
                     }
-                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2)){
+                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2) && getPiece(new Point(x3, y1)).getSide().equals("white")){
                         if(inRange(x4) && inRange(y2)){
                             jumpedPiece.add(new Point((x3), (y1)));
                             return new Point(x4,y2);
@@ -658,13 +654,13 @@ public class Board {
 
                     int x3 = pieceX+1;
                     int x4 = pieceX+2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
                         }
                     }
-                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2)){
+                    else if(isOccupied(x3, y1) && !isOccupied(x4, y2) && getPiece(new Point(x3, y1)).getSide().equals("white")){
                         if(inRange(x4) && inRange(y2)){
                             jumpedPiece.add(new Point((x3), (y1)));
                             return new Point(x4,y2);
@@ -677,7 +673,7 @@ public class Board {
                     int y1 = pieceY-1;
                     int x2 = pieceX-2;
                     int y2 = pieceY-2;
-                    if(isOccupied(x1, y1) && !isOccupied(x2, y2)){
+                    if(isOccupied(x1, y1) && !isOccupied(x2, y2) && getPiece(new Point(x1, y1)).getSide().equals("white")){
                         if(inRange(x2) && inRange(y2)){
                             jumpedPiece.add(new Point((x1), (y1)));
                             return new Point(x2,y2);
@@ -689,7 +685,7 @@ public class Board {
                     int y3 = pieceY+1;
                     int x4 = pieceX-2;
                     int y4 = pieceY+2;
-                    if(isOccupied(x3, y3) && !isOccupied(x4, y4)){
+                    if(isOccupied(x3, y3) && !isOccupied(x4, y4) && getPiece(new Point(x3, y3)).getSide().equals("white")){
                         if(inRange(x4) && inRange(y4)){
                             jumpedPiece.add(new Point((x3), (y3)));
                             return new Point(x4,y4);
@@ -701,7 +697,7 @@ public class Board {
                     int y5 = pieceY-1;
                     int x6 = pieceX+2;
                     int y6 = pieceY-2;
-                    if(isOccupied(x5, y5) && !isOccupied(x6, y6)){
+                    if(isOccupied(x5, y5) && !isOccupied(x6, y6) && getPiece(new Point(x5, y5)).getSide().equals("white")){
                         if(inRange(x6) && inRange(y6)){
                             jumpedPiece.add(new Point((x5), (y5)));
                             return new Point(x6,y6);
@@ -713,7 +709,7 @@ public class Board {
                     int y7 = pieceY+1;
                     int x8 = pieceX+2;
                     int y8 = pieceY+2;
-                    if(isOccupied(x7, y7) && !isOccupied(x8, y8)){
+                    if(isOccupied(x7, y7) && !isOccupied(x8, y8) && getPiece(new Point(x7, y7)).getSide().equals("white")){
                         if(inRange(x8) && inRange(y8)){
                             jumpedPiece.add(new Point((x7), (y7)));
                             return new Point(x8,y8);
@@ -1101,7 +1097,7 @@ public class Board {
                         silentDrawBoard();
                     }
                 }
-                else{
+                else{//BLACK
                     if(getPiece(p1).getIsKing()){
                         removePointFromList(p1,blackPosList); //p3
                         removePointFromList(p1,blackKingList);
@@ -1128,8 +1124,6 @@ public class Board {
             else{
                 System.out.println("Invalid move");
             }
-            // System.out.println("Nulling (" + p1.getX() + "," + p1.getY() + ")");
-            // board[p1.getX()][p1.getY()] = null;
         }
 
         else if(str.contains("x")){
@@ -1151,14 +1145,9 @@ public class Board {
                     boolean isPKing = getPiece(p1).getIsKing();
                     if(getPiece(p1).getSide().equals(("white"))){
                             Point p3 = canCapture(getPiece(p1)); //new point after jump -> 0,1
-                            // System.out.println("P1: " + p1);
-                            // System.out.println("P2: " + p2);
-                            // System.out.println("P3: " + p3);
                             if(p3.getX() == 0 && !getPiece(p1).getIsKing()){
                                 isPKing = true;
-                                //System.out.println("%move: Piece at " + p3 + " set to king");
                             }
-                            //System.out.println("%move: Removing " + p1 + " and " + p2);
                             board[p1.getX()][p1.getY()] = null;
                             board[p2.getX()][p2.getY()] = null; //removed jumped piece
                             removePointFromList(p1,whitePosList);
@@ -1178,9 +1167,6 @@ public class Board {
                             }
                             silentDrawBoard();
                             if(canCapture(getPiece(p3)) == null){
-                                //System.out.println("getPiece at " + p3 + " is " + getPiece(p3));
-                                //System.out.println("cancaptures=null on piece at " + p3 + " is " + (canCapture(getPiece(p3)) == null));
-                                //System.out.println("%move: Setting keepJump to false");
                                 keepJumping = false;
                                 blackTurn = true;
                             }
@@ -1193,8 +1179,6 @@ public class Board {
                             //System.out.println(p3);
                             if(p3.getX() == DIM-1 && !getPiece(p1).getIsKing()){
                                 isPKing = true;
-                                //board[p3.getX()][p3.getY()].setIsKing(true);
-                                //System.out.println("%move: Piece at " + p3 + " set to king");
                             }
                             board[p1.getX()][p1.getY()] = null;
                             board[p2.getX()][p2.getY()] = null;
@@ -1279,12 +1263,14 @@ public class Board {
                 if(blackTurn){
                     if(getPiece(p)!=null && getPiece(p).getSide().equals("black")){ //there is a piece at (i,j) and its legal to move (correct turn)
                         Piece piece = getPiece(p);
-                        ArrayList<Point> temp_moves = getMoves(piece);//get all possible moves for piece at (i,j)
-                        System.out.println("temp moves: " + temp_moves);
+                        ArrayList<Point> temp_movesR = getMovesR(piece);//get all possible moves for piece at (i,j)
+                        ArrayList<Point> temp_movesC = getMovesC(piece);//get all possible moves for piece at (i,j)
+                        ArrayList<String> temp_moves = combineMoves(temp_movesR, temp_movesC, piece);
+                        //System.out.println("temp moves: " + temp_moves);
                         for(int k = 0; k<temp_moves.size(); k++){
                             Board b = deepCopy(this);
-                            b = setBoardWithMove(b, piece, temp_moves.get(k)); //generate board with move k played
-                            //b.silentDrawBoard();
+                            b = setBoardWithMove(b, temp_moves.get(k)); //generate board with move k played
+                            b.silentDrawBoard();
                             list.add(b);
                         }
                     }
@@ -1292,12 +1278,14 @@ public class Board {
                 else{
                     if(getPiece(p)!=null && getPiece(p).getSide().equals("white")){ //there is a piece at (i,j) and its legal to move (correct turn)
                         Piece piece = getPiece(p);
-                        ArrayList<Point> temp_moves = getMoves(piece);//get all possible moves for piece at (i,j)
-                        System.out.println("temp moves: " + temp_moves);
+                        ArrayList<Point> temp_movesR = getMovesR(piece);//get all possible moves for piece at (i,j)
+                        ArrayList<Point> temp_movesC = getMovesC(piece);//get all possible moves for piece at (i,j)
+                        ArrayList<String> temp_moves = combineMoves(temp_movesR, temp_movesC, piece);
+                        //System.out.println("temp moves: " + temp_moves);
                         for(int k = 0; k<temp_moves.size(); k++){
                             Board b = deepCopy(this);
-                            b = setBoardWithMove(b, piece, temp_moves.get(k)); //generate board with move k played
-                            //b.silentDrawBoard();
+                            b = setBoardWithMove(b, temp_moves.get(k)); //generate board with move k played
+                            b.silentDrawBoard();
                             list.add(b);
                         }
                     }
@@ -1307,59 +1295,21 @@ public class Board {
         return list;
     }
 
-    public Board deepCopyW(Board b){
-        int d = b.getDIM();
-        Board res = new Board(d);
-        Piece [][] arr = b.getBoard();
-        Piece [][] res_arr = new Piece [d][d];
-        for(int r = 0; r<d; r++){
-            for(int c = 0; c<d; c++){
-                res_arr[r][c] = arr[r][c];
-            }
+    public ArrayList<String> combineMoves(ArrayList<Point> l1, ArrayList<Point> l2, Piece p){
+        ArrayList<String> res = new ArrayList<String>();
+        int pX = p.getX();
+        int pY = p.getY();
+        String from = pointToCord(new Point(pX,pY));
+        for(int i = 0; i<l1.size(); i++){
+            String to = pointToCord(l1.get(i));
+            String move = from+"-"+to;
+            res.add(move);
         }
-        res.setBoard(res_arr);
-        res.setWhitePosList(b.getWhitePosList());
-        res.setWhiteKingList(b.getWhiteKingList());
-        res.setBlackTurn(b.isBlackTurn());
-        res.silentDrawBoard();
-        return res;
-    }
-    public Board deepCopyB(Board b){
-        int d = b.getDIM();
-        Board res = new Board(d);
-        Piece [][] arr = b.getBoard();
-        Piece [][] res_arr = new Piece [d][d];
-        for(int r = 0; r<d; r++){
-            for(int c = 0; c<d; c++){
-                res_arr[r][c] = arr[r][c];
-            }
+        for(int i = 0; i<l2.size(); i++){
+            String to = pointToCord(l2.get(i));
+            String move = from+"x"+to;
+            res.add(move);
         }
-        res.setBoard(res_arr);
-        //res.setWhitePosList(b.getWhitePosList());
-        res.setBlackPosList(b.getBlackPosList());
-        res.setBlackKingList(b.getBlackKingList());
-        res.setBlackTurn(b.isBlackTurn());
-        res.silentDrawBoard();
-        return res;
-    }
-    public Board deepCopy(Board b){
-        int d = b.getDIM();
-        Board res = new Board(d);
-        Piece [][] arr = b.getBoard();
-        Piece [][] res_arr = new Piece [d][d];
-        for(int r = 0; r<d; r++){
-            for(int c = 0; c<d; c++){
-                res_arr[r][c] = arr[r][c];
-            }
-        }
-        res.setBoard(res_arr);
-        //commenting all 4 lines below causes minimax to 'work'
-        // res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
-        // res.setBlackPosList(deepListSet(b.getBlackPosList()));
-        // res.setWhitePosList(b.getWhitePosList());              
-        // res.setBlackPosList(b.getBlackPosList());
-        res.setBlackTurn(b.isBlackTurn());
-        res.silentDrawBoard();
         return res;
     }
 
@@ -1374,27 +1324,15 @@ public class Board {
     /*
     Given a board state and a point
     */
-    public Board setBoardWithMove(Board b, Piece piece, Point p){
-        System.out.println("Piece: " + piece);
+    public Board setBoardWithMove(Board b, String str){
         Board resBoard = deepCopy(b);
-        int pX = piece.getX();
-        int pY = piece.getY();
-        String from = pointToCord(new Point(pX, pY));
-        String to = pointToCord(p);
-        String cat = "";
-        if(Math.abs(pX-p.getX()) == 1 && Math.abs(pY-p.getY()) == 1){
-            cat = from+"-"+to;
-        }
-        else if(Math.abs(pX-p.getX()) == 2 && Math.abs(pY-p.getY()) == 2){
-            cat = from+"x"+to;
-        }
-        System.out.println("CAT: " + cat);
-        resBoard.move(cat,resBoard.getWhitePosList(), resBoard.getBlackPosList());
+        //System.out.println("STR: " + str);
+        resBoard.move(str,resBoard.getWhitePosList(), resBoard.getBlackPosList());
         resBoard.silentDrawBoard();
         return resBoard;
     }
 
-    public ArrayList<Point> getMoves(Piece p){
+    public ArrayList<Point> getMovesR(Piece p){
         ArrayList<Point> moves = new ArrayList<Point>();
         int x = p.getX();
         int y = p.getY();
@@ -1402,10 +1340,10 @@ public class Board {
         Point p2 = new Point(x-1, y+1);
         Point p3 = new Point(x+1, y-1);
         Point p4 = new Point(x+1, y+1);
-        Point p5 = new Point(x-2, y-2);
-        Point p6 = new Point(x-2, y+2);
-        Point p7 = new Point(x+2, y-2);
-        Point p8 = new Point(x+2, y+2);
+        // Point p5 = new Point(x-2, y-2);
+        // Point p6 = new Point(x-2, y+2);
+        // Point p7 = new Point(x+2, y-2);
+        // Point p8 = new Point(x+2, y+2);
         if(isMoveLegal(p,p1)){
             moves.add(p1);
         }
@@ -1418,19 +1356,55 @@ public class Board {
         if(isMoveLegal(p,p4)){
             moves.add(p4);
         }
+        return moves;
+    }
+
+    public ArrayList<Point> getMovesC(Piece p){
+        ArrayList<Point> moves = new ArrayList<Point>();
+        int x = p.getX();
+        int y = p.getY();
+        Point p1 = new Point(x-1, y-1);
+        Point p2 = new Point(x-1, y+1);
+        Point p3 = new Point(x+1, y-1);
+        Point p4 = new Point(x+1, y+1);
+        Point p5 = new Point(x-2, y-2);
+        Point p6 = new Point(x-2, y+2);
+        Point p7 = new Point(x+2, y-2);
+        Point p8 = new Point(x+2, y+2);
         if(canCapture(p)!= null && canCapture(p).getX() == p5.getX() && canCapture(p).getY() == p5.getY()){
-            moves.add(p5);
+            moves.add(p1);
         }
         if(canCapture(p)!= null && canCapture(p).getX() == p6.getX() && canCapture(p).getY() == p6.getY()){
-            moves.add(p6);
+            moves.add(p2);
         }
         if(canCapture(p)!= null && canCapture(p).getX() == p7.getX() && canCapture(p).getY() == p7.getY()){
-            moves.add(p7);
+            moves.add(p3);
         }
         if(canCapture(p)!= null && canCapture(p).getX() == p8.getX() && canCapture(p).getY() == p8.getY()){
-            moves.add(p8);
+            moves.add(p4);
         }
         return moves;
+    }
+
+    public Board deepCopy(Board b){
+        int d = b.getDIM();
+        Board res = new Board(d);
+        Piece [][] arr = b.getBoard();
+        Piece [][] res_arr = new Piece [d][d];
+        for(int r = 0; r<d; r++){
+            for(int c = 0; c<d; c++){
+                res_arr[r][c] = arr[r][c];
+            }
+        }
+        res.setBoard(res_arr);
+        //commenting all 4 lines below causes minimax to 'work'
+        res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
+        res.setBlackPosList(deepListSet(b.getBlackPosList()));
+        // res.setWhitePosList(b.getWhitePosList());              
+        // res.setBlackPosList(b.getBlackPosList());
+        res.setBlackTurn(b.isBlackTurn());
+        res.silentDrawBoard();
+        return res;
     }
 
     
