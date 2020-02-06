@@ -1,10 +1,14 @@
 import java.util.ArrayList;
-public class MinimaxAI{
+import java.util.HashSet;
+import java.util.Arrays;
+public class MinimaxDL{
 
 	private int depth;
+	private HashSet<String> visited;
 
-	public MinimaxAI(){
+	public MinimaxDL(){
 		depth = 0;
+		visited = new HashSet<String>();
 	}
 
 	public Board minimax_decision(Board b){
@@ -21,27 +25,34 @@ public class MinimaxAI{
 
 	public int max_value(Board b){
 		if(isTerminal(b)){
+			System.out.println("ret term: ");
 			return utility_value(b);
 		}
 		int v = Integer.MIN_VALUE;
 		ArrayList<Board> actions = b.getChildren();
-		depth++;
 		for(int i = 0; i<actions.size(); i++){
-			v = Math.max(v, min_value(actions.get(i)));
-			actions.get(i).setUtilValue(v);
+			if(visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){//actions.get(i) not seen before
+				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
+				v = Math.max(v, min_value(actions.get(i)));
+				actions.get(i).setUtilValue(v);
+			}
 		}
 		return v;
 	}
 
 	public int min_value(Board b){
 		if(isTerminal(b)){
+			System.out.println("ret term: ");
 			return utility_value(b);
 		}
 		int v = Integer.MAX_VALUE;
 		ArrayList<Board> actions = b.getChildren();
 		for(int i = 0; i<actions.size(); i++){
-			v = Math.min(v, max_value(actions.get(i)));
-			actions.get(i).setUtilValue(v);
+			if(visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){
+				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
+				v = Math.min(v, max_value(actions.get(i)));
+				actions.get(i).setUtilValue(v);
+			}
 		}
 		return v;
 	}

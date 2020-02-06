@@ -9,6 +9,7 @@ public class Board {
     private ArrayList<Point> blackKingList;
     private ArrayList<Point> jumpedPiece;
     private boolean blackTurn;
+    ArrayList<ArrayList<String>> moves;
     private int utilValue = Integer.MIN_VALUE;
 
     public Board(int size){
@@ -19,7 +20,8 @@ public class Board {
         blackPosList = new ArrayList<Point>();
         whiteKingList = new ArrayList<Point>();
         blackKingList = new ArrayList<Point>();
-        jumpedPiece = new ArrayList<Point>(); 
+        jumpedPiece = new ArrayList<Point>();
+        moves = new ArrayList<ArrayList<String>>(); 
         if(size == 4){
             Point w1 = new Point(3,0);
             Point w2 = new Point(3,2);
@@ -1122,7 +1124,7 @@ public class Board {
                 }
             }
             else{
-                System.out.println("Invalid move");
+                //System.out.println("Invalid move");
             }
         }
 
@@ -1140,7 +1142,7 @@ public class Board {
                 //System.exit(0);
             }
             while(keepJumping){
-                System.out.println((getPiece(p1) != null) + " " +  (canCapture(getPiece(p1)) != null));
+                //System.out.println((getPiece(p1) != null) + " " +  (canCapture(getPiece(p1)) != null));
                 if(getPiece(p1) != null && canCapture(getPiece(p1)) != null){ 
                     boolean isPKing = getPiece(p1).getIsKing();
                     if(getPiece(p1).getSide().equals(("white"))){
@@ -1212,7 +1214,7 @@ public class Board {
                     }
                 }
                 else{
-                    System.out.println("%move: Invalid move"); 
+                    //System.out.println("%move: Invalid move"); 
                     keepJumping = false; 
                     blackTurn = false;
                 }
@@ -1256,7 +1258,7 @@ public class Board {
     Returns arraylist of all board states 1 move deep
     */
     public ArrayList<Board> getChildren(){
-        ArrayList<Board> list = new ArrayList<Board>();
+        ArrayList<Board> list = new ArrayList<Board>(); 
         for(int i = 0; i<DIM; i++){
             for(int j= 0; j<DIM; j++){
                 Point p = new Point(i,j);
@@ -1266,7 +1268,8 @@ public class Board {
                         ArrayList<Point> temp_movesR = getMovesR(piece);//get all possible moves for piece at (i,j)
                         ArrayList<Point> temp_movesC = getMovesC(piece);//get all possible moves for piece at (i,j)
                         ArrayList<String> temp_moves = combineMoves(temp_movesR, temp_movesC, piece);
-                        //System.out.println("temp moves: " + temp_moves);
+                        moves.add(temp_moves);
+                        System.out.println("moves: " + moves);
                         for(int k = 0; k<temp_moves.size(); k++){
                             Board b = deepCopy(this);
                             b = setBoardWithMove(b, temp_moves.get(k)); //generate board with move k played
@@ -1275,13 +1278,14 @@ public class Board {
                         }
                     }
                 }
-                else{
+                else{ //white turn
                     if(getPiece(p)!=null && getPiece(p).getSide().equals("white")){ //there is a piece at (i,j) and its legal to move (correct turn)
                         Piece piece = getPiece(p);
                         ArrayList<Point> temp_movesR = getMovesR(piece);//get all possible moves for piece at (i,j)
                         ArrayList<Point> temp_movesC = getMovesC(piece);//get all possible moves for piece at (i,j)
                         ArrayList<String> temp_moves = combineMoves(temp_movesR, temp_movesC, piece);
-                        //System.out.println("temp moves: " + temp_moves);
+                        moves.add(temp_moves);
+                        System.out.println("moves: " + moves);
                         for(int k = 0; k<temp_moves.size(); k++){
                             Board b = deepCopy(this);
                             b = setBoardWithMove(b, temp_moves.get(k)); //generate board with move k played
@@ -1292,6 +1296,42 @@ public class Board {
                 }
             }
         }
+        //make move, capture only if they exist
+        //System.out.println("Moves: " + moves);
+        // if(moves.size() == 0 || moves.get(0).size() == 0){
+        //     return null;
+        // }
+        //else 
+        // if(!(moves.size() == 0 || moves.get(0).size() == 0) && moves.get(0).get(0).contains("x")){
+        //     //just do caps
+        //     outerloop:
+        //     for(int k = 0; k<moves.size(); k++){
+        //         for(int l = 0; l<moves.get(k).size(); l++){
+        //             if(moves.get(k).get(l).contains("-")){ //stop as soon as there are no more captures
+        //                 break outerloop;
+        //             }
+        //             Board b = deepCopy(this);
+        //             b = setBoardWithMove(b, moves.get(k).get(l)); 
+        //             b.silentDrawBoard();
+        //             list.add(b);
+        //         }  
+        //     }
+        // }
+        // else{
+        //     for(int k = 0; k<moves.size(); k++){
+        //         for(int l = 0; l<moves.get(k).size(); l++){
+        //             if(moves.size() == 0 || moves.get(0).size() == 0){
+        //                 continue;
+        //             }
+        //             else{
+        //                 Board b = deepCopy(this);
+        //                 b = setBoardWithMove(b, moves.get(k).get(l)); 
+        //                 b.silentDrawBoard();
+        //                 list.add(b);
+        //             }
+        //         }  
+        //     }
+        // }
         return list;
     }
 
@@ -1300,16 +1340,22 @@ public class Board {
         int pX = p.getX();
         int pY = p.getY();
         String from = pointToCord(new Point(pX,pY));
-        for(int i = 0; i<l1.size(); i++){
-            String to = pointToCord(l1.get(i));
-            String move = from+"-"+to;
-            res.add(move);
+        //add is tie?
+        if(l2.size() == 0){ 
+            for(int i = 0; i<l1.size(); i++){
+                String to = pointToCord(l1.get(i));
+                String move = from+"-"+to;
+                res.add(move);
+            }
         }
-        for(int i = 0; i<l2.size(); i++){
-            String to = pointToCord(l2.get(i));
-            String move = from+"x"+to;
-            res.add(move);
+        else{
+            for(int i = 0; i<l2.size(); i++){
+                String to = pointToCord(l2.get(i));
+                String move = from+"x"+to;
+                res.add(move);
+            }
         }
+
         return res;
     }
 
@@ -1467,6 +1513,8 @@ public class Board {
     public boolean isBlackTurn(){
         return blackTurn;
     }
-
+    public ArrayList<ArrayList<String>> getLegalMoves(){
+        return moves;
+    }
     
 }

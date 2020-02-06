@@ -1,22 +1,24 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 public class Start {
+    final static int size = 4;
     public static void main(String [] args){
         Scanner sc = new Scanner(System.in);
-
-        final int size = 4;
+        
         Board b = new Board(size);
         b.drawBoard();
 
         // b.move("A4-B3",b.getWhitePosList(),b.getBlackPosList());
         // b.drawBoard();
-        // b.move("D1-C2", b.getWhitePosList(),b.getBlackPosList());
+        // b.move("D3-C4", b.getWhitePosList(),b.getBlackPosList());
         // b.drawBoard();
-        // printBoardState(b.getBoard());
+        // b.move("A2-B1", b.getWhitePosList(),b.getBlackPosList());
+        // b.drawBoard();
+        // //printBoardState(b.getBoard());
         // ArrayList<Board> list = b.getChildren();
         // for(int i = 0; i<list.size(); i++){
         //     list.get(i).drawBoard();
-        //     printBoardState(list.get(i).getBoard());
+        //     //printBoardState(list.get(i).getBoard());
         // }
 
         //b.setBlackTurn(false); //makes it white(X) to move first
@@ -31,25 +33,24 @@ public class Start {
         // printBoardState(new_board2.getBoard()); //iterates through board[][], prints null if no piece is found, otherwise prints the point
         // System.out.println(new_board2.getBlackPosList());
         
-
-
-        System.out.print("0 for PvP, 1 for PvC: ");
-        int input = sc.nextInt();
-        if(input == 0){
-            pvp();
-        }
-        else if(input == 1){
-            pvc();
-        }
+        pvc();
+        // System.out.print("0 for PvP, 1 for PvC: ");
+        // int input = sc.nextInt();
+        // if(input == 0){
+        //     pvp();
+        // }
+        // else if(input == 1){
+        //     pvc();
+        // }
 
 
     }
 
     public static void pvc(){
         Scanner sc = new Scanner(System.in);
-        Board b1 = new Board(4);
-        MinimaxAI ai = new MinimaxAI();
-        b1.drawBoard();
+        Board b1 = new Board(size);
+        MinimaxDL ai = new MinimaxDL();
+        b1.silentDrawBoard();
         String m = "";
         int move = 1;
         while(!m.equals("quit")){
@@ -66,6 +67,10 @@ public class Start {
                     System.out.print("Enter a move: ");
                     m = sc.next();
                     if(m.equals("quit")) System.exit(0);
+                    // else if(!isLegal(m,b1)){
+                    //     System.err.println("That is not a legal move in the current position");
+                    //     continue;
+                    // }
                     String pieceStr = m.substring(0,2);
                     if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
                         System.out.print("Black's turn, try again: ");
@@ -272,6 +277,17 @@ public class Start {
         return res;
     }
     
-
+    public static boolean isLegal(String str, Board b){
+        b.getChildren();
+        ArrayList<ArrayList<String>> list = b.getLegalMoves();
+        for(int i = 0; i<list.size(); i++){
+            for(int j = 0; j<list.get(i).size(); j++){
+                if(list.get(i).get(j).contains(str)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     
 }
