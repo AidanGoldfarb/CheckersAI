@@ -1,6 +1,6 @@
 # CheckersAI
 Playable checkers game.
-AI coming soon...
+AI plays to depth 50, plays terribly 
 
 To play, compile all java classes and run Start.
   javac Start.java Piece.java Point.java Board.java
