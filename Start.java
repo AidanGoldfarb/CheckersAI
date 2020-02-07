@@ -5,26 +5,25 @@ public class Start {
     public static void main(String [] args){
         Scanner sc = new Scanner(System.in);
         
-        // Board b = new Board(size);
-        // b.drawBoard();
+        Board b = new Board(size);
+        b.drawBoard();
         
-        ArrayList<Point> list = new ArrayList<Point>();
-        Board b2 = new Board(size);
-        b2.drawBoard();
 
-        MinimaxDL m = new MinimaxDL();
-        System.out.println(m.isTerminal(b2));
         // b.move("A4-B3",b.getWhitePosList(),b.getBlackPosList());
         // b.drawBoard();
         // b.move("D3-C4", b.getWhitePosList(),b.getBlackPosList());
         // b.drawBoard();
         // b.move("A2-B1", b.getWhitePosList(),b.getBlackPosList());
         // b.drawBoard();
+        // b.move("C4xB3", b.getWhitePosList(),b.getBlackPosList());
+        // b.drawBoard();
+        // b.move("B1-C2", b.getWhitePosList(),b.getBlackPosList());
+        // b.drawBoard();
         // //printBoardState(b.getBoard());
         // ArrayList<Board> list = b.getChildren();
         // for(int i = 0; i<list.size(); i++){
         //     list.get(i).drawBoard();
-        //     //printBoardState(list.get(i).getBoard());
+        //     printBoardState(list.get(i).getBoard());
         // }
 
         //b.setBlackTurn(false); //makes it white(X) to move first
@@ -39,7 +38,8 @@ public class Start {
         // printBoardState(new_board2.getBoard()); //iterates through board[][], prints null if no piece is found, otherwise prints the point
         // System.out.println(new_board2.getBlackPosList());
         
-        //pvc();
+        pvc();
+
         // System.out.print("0 for PvP, 1 for PvC: ");
         // int input = sc.nextInt();
         // if(input == 0){
@@ -55,8 +55,10 @@ public class Start {
     public static void pvc(){
         Scanner sc = new Scanner(System.in);
         Board b1 = new Board(size);
+        b1.setBlackTurn(false);
         //MinimaxAI ai = new MinimaxAI();
-        MinimaxDL ai = new MinimaxDL();
+        //MinimaxDL ai = new MinimaxDL();
+        MinimaxH ai = new MinimaxH(5);
         b1.silentDrawBoard();
         String m = "";
         int move = 1;
@@ -67,6 +69,14 @@ public class Start {
             }
             else if(b1.getBlackPosList().isEmpty()){
                 System.out.println("White wins!");
+                System.exit(0);
+            }
+            else if(b1.getBlackPosList().size() == 1 && b1.getWhitePosList().size() == 1 && 
+                    b1.getBlackKingList().size() == 1 && b1.getWhiteKingList().size() == 1){
+                    // &&
+                    // b1.canCapture(b1.getPiece(b1.getBlackPosList().get(0))) == null && 
+                    // b1.canCapture(b1.getPiece(b1.getWhitePosList().get(0))) == null ){
+                System.out.println("Tie!");
                 System.exit(0);
             }
             else{
@@ -118,6 +128,7 @@ public class Start {
         // res.setWhitePosList(b.getWhitePosList());
         // res.setBlackPosList(b.getBlackPosList());
         res.setBlackTurn(b.isBlackTurn());
+        res.setUtilValue(b.getUtilValue());
         res.silentDrawBoard();
         return res;
     }

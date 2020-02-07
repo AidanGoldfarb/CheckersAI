@@ -1,14 +1,16 @@
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Arrays;
-public class MinimaxDL{
+public class MinimaxH{
 
 	private int depth;
 	private HashSet<String> visited;
+	private final int CUTOFF;
 
-	public MinimaxDL(){
+	public MinimaxH(int cutoff){
 		depth = 0;
 		visited = new HashSet<String>();
+		CUTOFF = cutoff; 
 	}
 
 	public Board minimax_decision(Board b){
@@ -32,14 +34,14 @@ public class MinimaxDL{
 	}
 
 	public int max_value(Board b){
-		if(isTerminal(b)){
+		if(depth == CUTOFF){
 			//System.out.println("min: ret terminal state with util value: " + utility_value(b)); 
 			b.drawBoard();
-			return utility_value(b);
+			return end_hueristic(b);
 		}
 		int v = Integer.MIN_VALUE;
 		ArrayList<Board> actions = b.getChildren();
-		//System.out.println(depth++);
+		System.out.println(depth++);
 		for(int i = 0; i<actions.size(); i++){
 			if(!visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){//actions.get(i) not seen before
 				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
@@ -57,14 +59,14 @@ public class MinimaxDL{
 	}
 
 	public int min_value(Board b){
-		if(isTerminal(b)){
+		if(depth == CUTOFF){
 			//System.out.println("min: ret terminal state with util value: " + utility_value(b));
 			b.drawBoard();
-			return utility_value(b);
+			return end_hueristic(b);
 		}
 		int v = Integer.MAX_VALUE;
 		ArrayList<Board> actions = b.getChildren();
-		//System.out.println(depth++);
+		System.out.println(depth++);
 		for(int i = 0; i<actions.size(); i++){
 			if(!visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){
 				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
@@ -81,16 +83,30 @@ public class MinimaxDL{
 		return v;
 	}
 
-	public int utility_value(Board b){
-		if(b.getWhitePosList().isEmpty()){
-			return 1;
-		}
-		else if(b.getBlackPosList().isEmpty()){
-			return -1;
+	public int end_hueristic(Board b){
+		boolean blackTurn = b.isBlackTurn();
+		Piece [][] board = b.getBoard();
+		int sum = 0;
+		if(!blackTurn){
+			//
+			for(int r = 0; r<b.getDIM(); r++){
+				for(int c = 0; c<b.getDIM(); c++){
+					if(b.isOccupied(r,c) && b.getPiece(new Point(r,c)).getSide().equals("white")){
+						sum+=(r-b.getDIM() * .1);
+					}
+				}
+			}
 		}
 		else{
-			return 0;
+			for(int r = 0; r<b.getDIM(); r++){
+				for(int c = 0; c<b.getDIM(); c++){
+					if(b.isOccupied(r,c) && b.getPiece(new Point(r,c)).getSide().equals("white")){
+						sum+=(r * .1);
+					}
+				}
+			}
 		}
+		return sum;
 	}
 
 	public boolean isTerminal(Board b){

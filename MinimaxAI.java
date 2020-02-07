@@ -16,6 +16,7 @@ public class MinimaxAI{
 				bestAction = actions.get(i);
 			}
 		}
+		System.out.println("returing best move");
 		return bestAction;
 	}
 
