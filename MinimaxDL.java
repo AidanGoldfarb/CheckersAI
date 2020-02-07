@@ -30,11 +30,13 @@ public class MinimaxDL{
 		}
 		int v = Integer.MIN_VALUE;
 		ArrayList<Board> actions = b.getChildren();
+		System.out.println(depth++);
 		for(int i = 0; i<actions.size(); i++){
-			if(visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){//actions.get(i) not seen before
+			if(!visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){//actions.get(i) not seen before
 				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
 				v = Math.max(v, min_value(actions.get(i)));
 				actions.get(i).setUtilValue(v);
+				System.out.println("max: Util value: " + v);
 			}
 		}
 		return v;
@@ -47,11 +49,14 @@ public class MinimaxDL{
 		}
 		int v = Integer.MAX_VALUE;
 		ArrayList<Board> actions = b.getChildren();
+		System.out.println(depth++);
 		for(int i = 0; i<actions.size(); i++){
-			if(visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){
+			if(!visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){
+				//actions.get(i).drawBoard();
 				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
 				v = Math.min(v, max_value(actions.get(i)));
 				actions.get(i).setUtilValue(v);
+				System.out.println("min: Util value: " + v);
 			}
 		}
 		return v;
@@ -59,7 +64,7 @@ public class MinimaxDL{
 
 	public int utility_value(Board b){
 		if(b.getWhitePosList().isEmpty()){
-			return 1;
+			return +1;
 		}
 		else if(b.getBlackPosList().isEmpty()){
 			return -1;

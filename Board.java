@@ -12,6 +12,53 @@ public class Board {
     ArrayList<ArrayList<String>> moves;
     private int utilValue = Integer.MIN_VALUE;
 
+    // public Board(int size){
+    //     DIM = size;
+    //     blackTurn = true;
+    //     board = new Piece [DIM][DIM];
+    //     whitePosList = new ArrayList<Point>();
+    //     blackPosList = new ArrayList<Point>();
+    //     whiteKingList = new ArrayList<Point>();
+    //     blackKingList = new ArrayList<Point>();
+    //     jumpedPiece = new ArrayList<Point>();
+    //     moves = new ArrayList<ArrayList<String>>(); 
+    //     if(size == 4){
+    //         Point w1 = new Point(3,0);
+    //         Point w2 = new Point(3,2);
+    //         Point b1 = new Point(0,1);
+    //         Point b2 = new Point(0,3);
+    //         whitePosList.add(w1);
+    //         whitePosList.add(w2);
+    //         blackPosList.add(b1);
+    //         blackPosList.add(b2);
+    //     }else{
+    //         for(int i = 0; i<size; i++){
+    //             for(int j = 0; j<size; j++){
+    //                 if(i<=2){
+    //                     if(i%2==0 && j%2!=0){
+    //                         Point p = new Point(i,j);//place black piece
+    //                         blackPosList.add(p);
+    //                     }
+    //                     else if(i%2!=0 && j%2==0){
+    //                         Point p = new Point(i,j);//place black piece
+    //                         blackPosList.add(p);
+    //                     }
+    //                 }
+    //                 else if(i>=5){
+    //                     if(i%2!=0 && j%2==0){
+    //                         Point p = new Point(i,j);//place black piece
+    //                         whitePosList.add(p);
+    //                     }
+    //                     else if(i%2==0 && j%2!=0){
+    //                         Point p = new Point(i,j);//place black piece
+    //                         whitePosList.add(p);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    // }
     public Board(int size){
         DIM = size;
         blackTurn = true;
@@ -29,8 +76,8 @@ public class Board {
             Point b2 = new Point(0,3);
             whitePosList.add(w1);
             whitePosList.add(w2);
-            blackPosList.add(b1);
-            blackPosList.add(b2);
+            // blackPosList.add(b1);
+            // blackPosList.add(b2);
         }else{
             for(int i = 0; i<size; i++){
                 for(int j = 0; j<size; j++){
@@ -59,6 +106,7 @@ public class Board {
         }
 
     }
+
 
     /*
     draws board given two arrays. each contain points where pieces are
@@ -434,7 +482,7 @@ public class Board {
                             return new Point(x2,y2);
                         }
                     }
-                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4) && getPiece(new Point(x2, y4)).getSide().equals("black")){
+                    else if(isOccupied(x1, y3) && !isOccupied(x2, y4) && getPiece(new Point(x1, y3)).getSide().equals("black")){
                         if(inRange(x2) && inRange(y4)){
                             jumpedPiece.add(new Point((x1), (y3)));
                             return new Point(x2,y4);

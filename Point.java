@@ -22,6 +22,9 @@ public class Point {
     checks if point is in a given list
     */
     public boolean isInList(ArrayList<Point> list){
+        if(list == null){
+            return false;
+        }
         int size = list.size();
         for(int i = 0; i<size; i++){
             if(list.get(i).getX() == this.getX() && (list.get(i).getY() == this.getY())){

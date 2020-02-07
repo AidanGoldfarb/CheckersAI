@@ -5,9 +5,15 @@ public class Start {
     public static void main(String [] args){
         Scanner sc = new Scanner(System.in);
         
-        Board b = new Board(size);
-        b.drawBoard();
+        // Board b = new Board(size);
+        // b.drawBoard();
+        
+        ArrayList<Point> list = new ArrayList<Point>();
+        Board b2 = new Board(size);
+        b2.drawBoard();
 
+        MinimaxDL m = new MinimaxDL();
+        System.out.println(m.isTerminal(b2));
         // b.move("A4-B3",b.getWhitePosList(),b.getBlackPosList());
         // b.drawBoard();
         // b.move("D3-C4", b.getWhitePosList(),b.getBlackPosList());
@@ -33,7 +39,7 @@ public class Start {
         // printBoardState(new_board2.getBoard()); //iterates through board[][], prints null if no piece is found, otherwise prints the point
         // System.out.println(new_board2.getBlackPosList());
         
-        pvc();
+        //pvc();
         // System.out.print("0 for PvP, 1 for PvC: ");
         // int input = sc.nextInt();
         // if(input == 0){
@@ -49,6 +55,7 @@ public class Start {
     public static void pvc(){
         Scanner sc = new Scanner(System.in);
         Board b1 = new Board(size);
+        //MinimaxAI ai = new MinimaxAI();
         MinimaxDL ai = new MinimaxDL();
         b1.silentDrawBoard();
         String m = "";

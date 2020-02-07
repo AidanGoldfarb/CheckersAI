@@ -25,7 +25,7 @@ public class MinimaxAI{
 		}
 		int v = Integer.MIN_VALUE;
 		ArrayList<Board> actions = b.getChildren();
-		depth++;
+		System.out.println(depth++);
 		for(int i = 0; i<actions.size(); i++){
 			v = Math.max(v, min_value(actions.get(i)));
 			actions.get(i).setUtilValue(v);
@@ -39,6 +39,7 @@ public class MinimaxAI{
 		}
 		int v = Integer.MAX_VALUE;
 		ArrayList<Board> actions = b.getChildren();
+		System.out.println(depth++);
 		for(int i = 0; i<actions.size(); i++){
 			v = Math.min(v, max_value(actions.get(i)));
 			actions.get(i).setUtilValue(v);
