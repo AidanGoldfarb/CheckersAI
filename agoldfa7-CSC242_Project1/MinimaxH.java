@@ -25,7 +25,7 @@ public class MinimaxH{
 			if(bestAction.getUtilValue() < minValue){
 				bestAction = actions.get(i);
 			}
-			visited.clear();
+			//visited.clear();
 		}
 		visited.clear();
 		return bestAction;

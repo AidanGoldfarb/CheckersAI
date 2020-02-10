@@ -18,7 +18,7 @@ public class Start {
             pvp();
         }
         else if(input == 1){
-            System.out.print("0: Minimax(default)  |  1: MinimaxH  |  2: MinimaxH-AB: ");
+            System.out.print("0: Minimax(will run out of memory)  |  1: MinimaxH  |  2: MinimaxH-AB: ");
             int s = sc.nextInt();
             if(s == 0){
                 pvc();
@@ -160,10 +160,15 @@ public class Start {
                     }
                     else{
                         System.out.println("\n\nThinking...");
+                        try{
                         Board new_board = ai.minimax_decision(b1);
                         System.out.println("Computer has found the best move: ");
                         b1 = deepCopy(new_board);
                         new_board.drawBoard();
+                        }catch(StackOverflowError e){
+                            System.out.println("Ran out of memory...don't use regular minimax on 8x8 board");
+                            System.exit(-1);
+                        }
                     }
                 }
             }else{

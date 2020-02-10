@@ -18,7 +18,7 @@ public class Start {
             pvp();
         }
         else if(input == 1){
-            System.out.print("0: Minimax(default)  |  1: MinimaxH  |  2: MinimaxH-AB: ");
+            System.out.print("0: Minimax(will run out of memory)  |  1: MinimaxH  |  2: MinimaxH-AB: ");
             int s = sc.nextInt();
             if(s == 0){
                 pvc();
@@ -119,7 +119,7 @@ public class Start {
         String m = "";
         int move = 1;
         while(!m.equals("quit")){
-            if(move<7){
+            if(move<7 && !b1.getWhitePosList().isEmpty() && !b1.getBlackPosList().isEmpty()){
                 if(b1.getWhitePosList().isEmpty()){
                     System.out.println("Black wins!");
                     System.exit(0);
@@ -140,10 +140,10 @@ public class Start {
                         System.out.print("Enter a move, 'quit' to quit: ");
                         m = sc.next();
                         if(m.equals("quit")) System.exit(0);
-                        // else if(!isLegal(m,b1)){
-                        //     System.err.println("That is not a legal move in the current position");
-                        //     continue;
-                        // }
+                        else if(!isLegal(m,b1)){
+                            System.err.println("That is not a legal move in the current position");
+                            continue;
+                        }
                         String pieceStr = m.substring(0,2);
                         if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
                             System.out.print("Black's turn, try again: ");
@@ -160,14 +160,19 @@ public class Start {
                     }
                     else{
                         System.out.println("\n\nThinking...");
+                        try{
                         Board new_board = ai.minimax_decision(b1);
                         System.out.println("Computer has found the best move: ");
                         b1 = deepCopy(new_board);
                         new_board.drawBoard();
+                        }catch(StackOverflowError e){
+                            System.out.println("Ran out of memory...don't use regular minimax on 8x8 board");
+                            System.exit(-1);
+                        }
                     }
                 }
             }else{
-                System.out.println("Tie!");
+                System.out.println("Tie! (move limit reached)");
                 System.exit(0);
             }
         }
@@ -200,10 +205,10 @@ public class Start {
                     System.out.print("Enter a move: ");
                     m = sc.next();
                     if(m.equals("quit")) System.exit(0);
-                    // else if(!isLegal(m,b1)){
-                    //     System.err.println("That is not a legal move in the current position");
-                    //     continue;
-                    // }
+                    else if(!isLegal(m,b1)){
+                            System.err.println("That is not a legal move in the current position");
+                            continue;
+                    }
                     String pieceStr = m.substring(0,2);
                     if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
                         System.out.print("Black's turn, try again: ");
@@ -256,10 +261,10 @@ public class Start {
                     System.out.print("Enter a move: ");
                     m = sc.next();
                     if(m.equals("quit")) System.exit(0);
-                    // else if(!isLegal(m,b1)){
-                    //     System.err.println("That is not a legal move in the current position");
-                    //     continue;
-                    // }
+                    else if(!isLegal(m,b1)){
+                            System.err.println("That is not a legal move in the current position");
+                            continue;
+                    }
                     String pieceStr = m.substring(0,2);
                     if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
                         System.out.print("Black's turn, try again: ");
@@ -303,8 +308,12 @@ public class Start {
                 System.out.print("Enter a move: ");
                 m = sc.next();
                 if(m.equals("quit")) System.exit(0);
+                else if(!isLegal(m,b1)){
+                    System.err.println("That is not a legal move in the current position");
+                    continue;
+                }
+                System.out.println(b1.getLegalMoves());
                 String pieceStr = m.substring(0,2);
-                //System.out.println("sub is " + pieceStr);
                 if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
                     System.out.print("Black's turn, try again: ");
                 }
@@ -318,6 +327,7 @@ public class Start {
                     b1.drawBoard();
                 }
             }
+            b1.clearMoves();
         }
     }
     public static void printBoardState(Piece[][] board){
@@ -340,12 +350,24 @@ public class Start {
         }
         return res;
     }  
+    /*
+    *Test whether a move on a given board state is legal
+    */
     public static boolean isLegal(String str, Board b){
         b.getChildren();
+        boolean capture = false;
         ArrayList<ArrayList<String>> list = b.getLegalMoves();
         for(int i = 0; i<list.size(); i++){
             for(int j = 0; j<list.get(i).size(); j++){
-                if(list.get(i).get(j).contains(str)){
+                if(list.get(i).get(j).contains("x")){
+                    System.out.println("Capture is true ObjLongConsumer: " + list.get(i).get(j));
+                    capture = true;
+                }
+            }
+        }
+        for(int i = 0; i<list.size(); i++){
+            for(int j = 0; j<list.get(i).size(); j++){
+                if(list.get(i).get(j).contains(str) && (capture ^ str.contains("-"))){
                     return true;
                 }
             }

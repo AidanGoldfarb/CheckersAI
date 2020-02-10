@@ -24,14 +24,12 @@ public class MinimaxHAB{
 		Board bestAction = actions.get(0);
 		for(int i = 0; i<actions.size(); i++){
 			int minValue = min_value(actions.get(i),alpha,beta);
-			//System.out.println("minValue: " + minValue);
 			depth = 0; //reset depth
 			if(bestAction.getUtilValue() < minValue){
 				bestAction = actions.get(i);
 			}
-			visited.clear();
+			//visited.clear(); //submitted file has this uncommented on all minimax files
 		}
-		//System.out.println("returning best action w util val: " + bestAction.getUtilValue());
 		visited.clear();
 		return bestAction;
 	}
@@ -133,8 +131,6 @@ public class MinimaxHAB{
         res.setBoard(res_arr);
         res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
         res.setBlackPosList(deepListSet(b.getBlackPosList()));
-        // res.setWhitePosList(b.getWhitePosList());
-        // res.setBlackPosList(b.getBlackPosList());
         res.setUtilValue(b.getUtilValue());
         res.setBlackTurn(b.isBlackTurn());
         res.silentDrawBoard();

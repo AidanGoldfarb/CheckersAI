@@ -50,8 +50,6 @@ public class MinimaxDL{
 
 	public int min_value(Board b){
 		if(isTerminal(b)){
-			//System.out.println("min: ret terminal state with util value: " + utility_value(b));
-			//b.drawBoard();
 			return utility_value(b);
 		}
 		int v = Integer.MAX_VALUE;

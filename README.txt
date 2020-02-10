@@ -14,7 +14,7 @@ Movement:
 	2)Multi-captures are automatically calculated according to maximum capture rule (longest capture always taken). Simply enter the first capture move.
 		i.e. If longest capture sequence is A1xB2xC3, entering A1xB2 is equivilant.
 	3)A1 is top left, D4 is bottom right.
-	4)Illegal moves are currently not accepted, so please enter a legal move. 
+	4)Illegal moves are rejected and you will be asked to move again 
 
 Requirements:
 	1)4x4 minimax plays quickly and perfectly. In checkers, moving second is an advantage (shown by 4x4 AI vs AI, where 2nd to move always wins). Per Prof. Ferguson instructions, a tie is automatically reached after 10 ply
@@ -24,8 +24,9 @@ Requirements:
 		A: Board.getChildren(): method of a board state, return all possible 'child' states (all legal moves made) for a given state
 		Actions: Board.getChildren() turn dependant
 		Results: Board.move(move) results in an updated Board state with move made
-		Cost: Depth is calculated when looking down the tree, fixed-depth.
+		Cost: Depth is calculated when looking down the tree, fixed-depth. Implemented in the various minimax classes
 	4) Board.java  Piece.java  Point.java  Start.java  Minimax(DL/H/HAB).java(3 different classes) represent proper object-oriented design
+		Per requirements, there is no standalone alpha-beta pruning minimax, only a minimax heuristic with alpha beta. This could be easily changed by replacing the cutoff test with terminal test. 
 
 Heuristic:
 	1)A basic row score system. The farther a piece is advanced up the board, the better. A high utility value is awarded to a position with more advanced pieces.

@@ -19,35 +19,27 @@ public class MinimaxDL{
 		Board bestAction = actions.get(0);
 		for(int i = 0; i<actions.size(); i++){
 			int minValue = min_value(actions.get(i));
-			//System.out.println("minValue: " + minValue);
 			depth = 0; //reset depth
 			if(bestAction.getUtilValue() < minValue){
 				bestAction = actions.get(i);
 			}
-			visited.clear();
+			//visited.clear();
 		}
-		//System.out.println("returning best action w util val: " + bestAction.getUtilValue());
 		visited.clear();
 		return bestAction;
 	}
 
 	public int max_value(Board b){
 		if(isTerminal(b)){
-			//System.out.println("min: ret terminal state with util value: " + utility_value(b)); 
-			//b.drawBoard();
 			return utility_value(b);
 		}
 		int v = Integer.MIN_VALUE;
 		ArrayList<Board> actions = b.getChildren();
-		//System.out.println(depth++);
+
 		for(int i = 0; i<actions.size(); i++){
 			if(!visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){//actions.get(i) not seen before
 				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
 				v = Math.max(v, min_value(actions.get(i)));
-				//if(v>Integer.MIN_VALUE && v<Integer.MAX_VALUE){//not +/- infinity{
-					//actions.get(i).setUtilValue(v);
-					//System.out.println("max: Setting util val to " + v);
-				//}
 			}
 			else{
 				actions.get(i).setUtilValue(0);
@@ -58,8 +50,6 @@ public class MinimaxDL{
 
 	public int min_value(Board b){
 		if(isTerminal(b)){
-			//System.out.println("min: ret terminal state with util value: " + utility_value(b));
-			//b.drawBoard();
 			return utility_value(b);
 		}
 		int v = Integer.MAX_VALUE;
