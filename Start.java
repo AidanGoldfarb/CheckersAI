@@ -1,65 +1,182 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 public class Start {
-    final static int size = 4;
+    static int size;
     public static void main(String [] args){
         Scanner sc = new Scanner(System.in);
-        
-        Board b = new Board(size);
-        b.drawBoard();
-        
+        System.out.print("Select board size (4 or 8): ");
+        int in = sc.nextInt();
+        if(in == 4){
+            size = 4;
+        }
+        else{
+            size = 8;
+        }
+        System.out.print("0: Human v.s. Human(default) |  1: Human v AI  |  2: AI v AI: ");
+        int input = sc.nextInt();
+        if(input == 0){
+            pvp();
+        }
+        else if(input == 1){
+            System.out.print("0: Minimax(default)  |  1: MinimaxH  |  2: MinimaxH-AB: ");
+            int s = sc.nextInt();
+            if(s == 0){
+                pvc();
+            }
+            else if(s == 1){
+                int depth = 16;
+                while(depth>15){
+                    System.out.print("Specify a depth limit (10 recommended, max 15): ");
+                    depth = sc.nextInt();
+                    if(depth>15){
+                        System.out.println("This isn't DeepBlue...");
+                    }
+                }
+                pvcH(depth);
 
-        // b.move("A4-B3",b.getWhitePosList(),b.getBlackPosList());
-        // b.drawBoard();
-        // b.move("D3-C4", b.getWhitePosList(),b.getBlackPosList());
-        // b.drawBoard();
-        // b.move("A2-B1", b.getWhitePosList(),b.getBlackPosList());
-        // b.drawBoard();
-        // b.move("C4xB3", b.getWhitePosList(),b.getBlackPosList());
-        // b.drawBoard();
-        // b.move("B1-C2", b.getWhitePosList(),b.getBlackPosList());
-        // b.drawBoard();
-        // //printBoardState(b.getBoard());
-        // ArrayList<Board> list = b.getChildren();
-        // for(int i = 0; i<list.size(); i++){
-        //     list.get(i).drawBoard();
-        //     printBoardState(list.get(i).getBoard());
-        // }
-
-        //b.setBlackTurn(false); //makes it white(X) to move first
-
-        // MinimaxAI ai = new MinimaxAI(); //initialize minimax object
-        // Board new_board = ai.minimax_decision(b); 
-        // new_board.drawBoard(); //draws board, and updates board[][] values 
-        // printBoardState(new_board.getBoard());
-
-        // Board new_board2 = ai.minimax_decision(new_board); //same thing, attempting to use deepCopy
-        // new_board2.drawBoard(); //draw and update
-        // printBoardState(new_board2.getBoard()); //iterates through board[][], prints null if no piece is found, otherwise prints the point
-        // System.out.println(new_board2.getBlackPosList());
-        
-        pvc();
-
-        // System.out.print("0 for PvP, 1 for PvC: ");
-        // int input = sc.nextInt();
-        // if(input == 0){
-        //     pvp();
-        // }
-        // else if(input == 1){
-        //     pvc();
-        // }
-
+            }
+            else if(s == 2){
+                int depth = 16;
+                while(depth>15){
+                    System.out.print("Specify a depth limit (10 recommended, max 15): ");
+                    depth = sc.nextInt();
+                    if(depth>15){
+                        System.out.println("This isn't DeepBlue...");
+                    }
+                }
+                pcvAB(depth);
+            }
+            else{
+                pvc();
+            }
+            pvc();
+        }
+        else if(input == 2){
+            if(in == 4){
+                cvc();
+            }else{
+                cvc8();
+            }
+        }
+        else{
+            pvp();
+        }
 
     }
 
+    public static void cvc(){
+        int moves = 0;
+        Board b = new Board(size);
+        b.drawBoard();
+        MinimaxDL ai1 = new MinimaxDL();
+        MinimaxDL ai2 = new MinimaxDL();
+        while(true){
+            if(b.getBlackPosList().size() == 0){
+                System.out.println("White wins!");
+                System.exit(0);
+            }
+            else if(b.getWhitePosList().size() == 0){
+                System.out.println("Black wins!");
+                System.exit(0);
+            }
+            Board new_board = ai1.minimax_decision(b);
+            new_board.drawBoard();
+            Board new_board2 = ai2.minimax_decision(new_board);
+            new_board2.drawBoard();
+            b = deepCopy(new_board2);
+            moves++;
+        }
+    } 
+    public static void cvc8(){
+        int moves = 0;
+        Board b = new Board(size);
+        b.drawBoard();
+        MinimaxHAB ai1 = new MinimaxHAB(15);
+        MinimaxHAB ai2 = new MinimaxHAB(15);
+        while(moves<20){ //current heuristic gets in a move loop after this
+            if(b.getBlackPosList().size() == 0){
+                System.out.println("White wins!");
+                System.exit(0);
+            }
+            else if(b.getWhitePosList().size() == 0){
+                System.out.println("Black wins!");
+                System.exit(0);
+            }
+            Board new_board = ai1.minimax_decision(b);
+            new_board.drawBoard();
+            Board new_board2 = ai2.minimax_decision(new_board);
+            new_board2.drawBoard();
+            b = deepCopy(new_board2);
+            moves++;
+        }
+        System.out.println("Played to a TIE using heuristic + ab pruning");
+    }
     public static void pvc(){
         Scanner sc = new Scanner(System.in);
         Board b1 = new Board(size);
-        b1.setBlackTurn(false);
-        //MinimaxAI ai = new MinimaxAI();
-        //MinimaxDL ai = new MinimaxDL();
-        MinimaxH ai = new MinimaxH(5);
-        b1.silentDrawBoard();
+        MinimaxDL ai = new MinimaxDL();
+        b1.drawBoard();
+        String m = "";
+        int move = 1;
+        while(!m.equals("quit")){
+            if(move<7 && !b1.getWhitePosList().isEmpty() && !b1.getBlackPosList().isEmpty()){
+                if(b1.getWhitePosList().isEmpty()){
+                    System.out.println("Black wins!");
+                    System.exit(0);
+                }
+                else if(b1.getBlackPosList().isEmpty()){
+                    System.out.println("White wins!");
+                    System.exit(0);
+                }
+                else if(b1.getBlackPosList().size() == 1 && b1.getWhitePosList().size() == 1 && 
+                        b1.getBlackKingList().size() == 1 && b1.getWhiteKingList().size() == 1&&
+                        b1.canCapture(b1.getPiece(b1.getBlackPosList().get(0))) == null && 
+                        b1.canCapture(b1.getPiece(b1.getWhitePosList().get(0))) == null ){
+                    System.out.println("Tie!");
+                    System.exit(0);
+                }
+                else{
+                    if(b1.isBlackTurn()){
+                        System.out.print("Enter a move, 'quit' to quit: ");
+                        m = sc.next();
+                        if(m.equals("quit")) System.exit(0);
+                        else if(!isLegal(m,b1)){
+                            System.err.println("That is not a legal move in the current position");
+                            continue;
+                        }
+                        String pieceStr = m.substring(0,2);
+                        if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
+                            System.out.print("Black's turn, try again: ");
+                        }
+                        else if(!b1.isBlackTurn() && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
+                            System.out.print("White's turn, try again: ");
+                        }
+                        else{
+                            b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
+                            move++;
+                            System.out.println("\nYour move: ");
+                            b1.drawBoard();
+                        }
+                    }
+                    else{
+                        System.out.println("\n\nThinking...");
+                        Board new_board = ai.minimax_decision(b1);
+                        System.out.println("Computer has found the best move: ");
+                        b1 = deepCopy(new_board);
+                        new_board.drawBoard();
+                    }
+                }
+            }else{
+                System.out.println("Tie! (move limit reached)");
+                System.exit(0);
+            }
+        }
+    }
+    public static void pvcH(int depth){
+        Scanner sc = new Scanner(System.in);
+        Board b1 = new Board(size);
+        MinimaxH ai = new MinimaxH(depth);
+        b1.drawBoard();
         String m = "";
         int move = 1;
         while(!m.equals("quit")){
@@ -72,10 +189,9 @@ public class Start {
                 System.exit(0);
             }
             else if(b1.getBlackPosList().size() == 1 && b1.getWhitePosList().size() == 1 && 
-                    b1.getBlackKingList().size() == 1 && b1.getWhiteKingList().size() == 1){
-                    // &&
-                    // b1.canCapture(b1.getPiece(b1.getBlackPosList().get(0))) == null && 
-                    // b1.canCapture(b1.getPiece(b1.getWhitePosList().get(0))) == null ){
+                    b1.getBlackKingList().size() == 1 && b1.getWhiteKingList().size() == 1&&
+                    b1.canCapture(b1.getPiece(b1.getBlackPosList().get(0))) == null && 
+                    b1.canCapture(b1.getPiece(b1.getWhitePosList().get(0))) == null ){
                 System.out.println("Tie!");
                 System.exit(0);
             }
@@ -84,10 +200,10 @@ public class Start {
                     System.out.print("Enter a move: ");
                     m = sc.next();
                     if(m.equals("quit")) System.exit(0);
-                    // else if(!isLegal(m,b1)){
-                    //     System.err.println("That is not a legal move in the current position");
-                    //     continue;
-                    // }
+                    else if(!isLegal(m,b1)){
+                            System.err.println("That is not a legal move in the current position");
+                            continue;
+                    }
                     String pieceStr = m.substring(0,2);
                     if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
                         System.out.print("Black's turn, try again: ");
@@ -103,39 +219,74 @@ public class Start {
                     }
                 }
                 else{
+                    System.out.println("\n\nThinking...");
                     Board new_board = ai.minimax_decision(b1);
+                    System.out.println("Computer has found a good move: ");
                     b1 = deepCopy(new_board);
                     new_board.drawBoard();
-                    //b1.drawBoard();
                 }
             }
         }
     }
-
-    public static Board deepCopy(Board b){
-        int d = b.getDIM();
-        Board res = new Board(d);
-        Piece [][] arr = b.getBoard();
-        Piece [][] res_arr = new Piece [d][d];
-        for(int r = 0; r<d; r++){
-            for(int c = 0; c<d; c++){
-                res_arr[r][c] = arr[r][c];
+    public static void pcvAB(int depth){
+        Scanner sc = new Scanner(System.in);
+        Board b1 = new Board(size);
+        MinimaxHAB ai = new MinimaxHAB(depth);
+        b1.drawBoard();
+        String m = "";
+        int move = 1;
+        while(!m.equals("quit")){
+            if(b1.getWhitePosList().isEmpty()){
+                System.out.println("Black wins!");
+                System.exit(0);
+            }
+            else if(b1.getBlackPosList().isEmpty()){
+                System.out.println("White wins!");
+                System.exit(0);
+            }
+            else if(b1.getBlackPosList().size() == 1 && b1.getWhitePosList().size() == 1 && 
+                    b1.getBlackKingList().size() == 1 && b1.getWhiteKingList().size() == 1&&
+                    b1.canCapture(b1.getPiece(b1.getBlackPosList().get(0))) == null && 
+                    b1.canCapture(b1.getPiece(b1.getWhitePosList().get(0))) == null ){
+                System.out.println("Tie!");
+                System.exit(0);
+            }
+            else{
+                if(b1.isBlackTurn()){
+                    System.out.print("Enter a move: ");
+                    m = sc.next();
+                    if(m.equals("quit")) System.exit(0);
+                    else if(!isLegal(m,b1)){
+                            System.err.println("That is not a legal move in the current position");
+                            continue;
+                    }
+                    String pieceStr = m.substring(0,2);
+                    if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
+                        System.out.print("Black's turn, try again: ");
+                    }
+                    else if(!b1.isBlackTurn() && b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){
+                        System.out.print("White's turn, try again: ");
+                    }
+                    else{
+                        b1.move(m, b1.getWhitePosList(), b1.getWhitePosList());
+                        move++;
+                        System.out.println("\n");
+                        b1.drawBoard();
+                    }
+                }
+                else{
+                    System.out.println("\n\nThinking...");
+                    Board new_board = ai.minimax_decision(b1);
+                    System.out.println("Computer has found a good move: ");
+                    b1 = deepCopy(new_board);
+                    new_board.drawBoard();
+                }
             }
         }
-        res.setBoard(res_arr);
-        res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
-        res.setBlackPosList(deepListSet(b.getBlackPosList()));
-        // res.setWhitePosList(b.getWhitePosList());
-        // res.setBlackPosList(b.getBlackPosList());
-        res.setBlackTurn(b.isBlackTurn());
-        res.setUtilValue(b.getUtilValue());
-        res.silentDrawBoard();
-        return res;
     }
-
     public static void pvp(){
         Scanner sc = new Scanner(System.in);
-        Board b1 = new Board(4);
+        Board b1 = new Board(size);
         b1.drawBoard();
         String m = "";
         int move = 1;
@@ -152,8 +303,12 @@ public class Start {
                 System.out.print("Enter a move: ");
                 m = sc.next();
                 if(m.equals("quit")) System.exit(0);
+                else if(!isLegal(m,b1)){
+                    System.err.println("That is not a legal move in the current position");
+                    continue;
+                }
+                System.out.println(b1.getLegalMoves());
                 String pieceStr = m.substring(0,2);
-                //System.out.println("sub is " + pieceStr);
                 if(b1.isBlackTurn() && !b1.getPiece(b1.cordToPoint(pieceStr)).getSide().equals("black")){//white's turn
                     System.out.print("Black's turn, try again: ");
                 }
@@ -167,113 +322,9 @@ public class Start {
                     b1.drawBoard();
                 }
             }
+            b1.clearMoves();
         }
     }
-
-    public static void loadInitialBoard(Board b, int dim){
-        if(dim == 4){
-            ArrayList<Point> wPosList = new ArrayList<Point>();
-            ArrayList<Point> bPosList = new ArrayList<Point>();
-            //BLACK: 0,1 and 0,3 WHITE: 3,0 and 3,2
-            Point w1 = new Point(3,0);
-            Point w2 = new Point(3,2);
-            Point b1 = new Point(0,1);
-            Point b2 = new Point(0,3);
-            // Piece white1 = new Piece("white", w1.getX(), w1.getY());
-            // Piece white2 = new Piece("white", w2.getX(), w2.getY());
-            // Piece black1 = new Piece("black", b1.getX(), b1.getY());
-            // Piece black2 = new Piece("black", b2.getX(), b2.getY());
-            // Piece [][] board = new Piece [4][4];
-            // board[3][0] = white1;
-            // board[3][2] = white2;
-            // board[0][1] = black1;
-            // board[0][3] = black2;
-            // b.setBoard(board);
-            wPosList.add(w1);
-            wPosList.add(w2);
-            bPosList.add(b1);
-            bPosList.add(b2);
-            b.setWhitePosList(wPosList);
-            b.setBlackPosList(bPosList);
-            b.drawBoard();
-        }
-        else if(dim == 8){
-            ArrayList<Point> wPosList = new ArrayList<Point>();
-            ArrayList<Point> bPosList = new ArrayList<Point>();
-            for(int i = 0; i<dim; i++){
-                for(int j = 0; j<dim; j++){
-                    if(i<=2){
-                        if(i%2==0 && j%2!=0){
-                            Point p = new Point(i,j);//place black piece
-                            bPosList.add(p);
-                        }
-                        else if(i%2!=0 && j%2==0){
-                            Point p = new Point(i,j);//place black piece
-                            bPosList.add(p);
-                        }
-                    }
-                    else if(i>=5){
-                        if(i%2!=0 && j%2==0){
-                            Point p = new Point(i,j);//place black piece
-                            wPosList.add(p);
-                        }
-                        else if(i%2==0 && j%2!=0){
-                            Point p = new Point(i,j);//place black piece
-                            wPosList.add(p);
-                        }
-                    }
-                }
-            }
-            b.setWhitePosList(wPosList);
-            b.setBlackPosList(bPosList);
-            b.drawBoard();
-        }
-    }
-
-    public static void loadTestBoard(Board b, int dim){
-        if(dim == 4){
-            ArrayList<Point> wPosList = new ArrayList<Point>();
-            ArrayList<Point> bPosList = new ArrayList<Point>();
-            Point w1 = new Point(0,1);
-            Point b1 = new Point(1,2);
-            //Point b2 = new Point(0,1);
-
-            wPosList.add(w1);
-            bPosList.add(b1);
-            //bPosList.add(b2);
-
-            // Piece white1 = new Piece("white", w1.getX(), w1.getY());
-            // white1.setIsKing(true);
-            // Piece black1 = new Piece("black", b1.getX(), b1.getY());
-            // Piece [][] board = new Piece [4][4];
-            // board[0][0] = white1;
-            // board[2][1] = black1;
-            // b.setBoard(board);
-            b.setWhitePosList(wPosList);
-            b.setBlackPosList(bPosList);
-            b.setWhiteKingList(wPosList);
-            //b.setBlackKingList(bPosList);
-
-            b.drawBoard();
-        }
-        else{
-            ArrayList<Point> wPosList = new ArrayList<Point>();
-            ArrayList<Point> bPosList = new ArrayList<Point>();
-            Point w1 = new Point(2,0);
-            Point b1 = new Point(1,1);
-            Point b2 = new Point(1,3);
-
-            wPosList.add(w1);
-            bPosList.add(b1);
-            bPosList.add(b2);
-
-            b.setWhitePosList(wPosList);
-            b.setBlackPosList(bPosList);
-
-            b.drawBoard();
-        }
-    }
-
     public static void printBoardState(Piece[][] board){
         for (int r = 0; r<4; r++){
             for (int c = 0; c<4; c++){
@@ -293,19 +344,50 @@ public class Start {
             res.add(list.get(i));
         }
         return res;
-    }
-    
+    }  
+    /*
+    *Test whether a move on a given board state is legal
+    */
     public static boolean isLegal(String str, Board b){
         b.getChildren();
+        boolean capture = false;
         ArrayList<ArrayList<String>> list = b.getLegalMoves();
         for(int i = 0; i<list.size(); i++){
             for(int j = 0; j<list.get(i).size(); j++){
-                if(list.get(i).get(j).contains(str)){
+                if(list.get(i).get(j).contains("x")){
+                    System.out.println("Capture is true ObjLongConsumer: " + list.get(i).get(j));
+                    capture = true;
+                }
+            }
+        }
+        for(int i = 0; i<list.size(); i++){
+            for(int j = 0; j<list.get(i).size(); j++){
+                if(list.get(i).get(j).contains(str) && (capture ^ str.contains("-"))){
                     return true;
                 }
             }
         }
         return false;
+    }
+    public static Board deepCopy(Board b){
+        int d = b.getDIM();
+        Board res = new Board(d);
+        Piece [][] arr = b.getBoard();
+        Piece [][] res_arr = new Piece [d][d];
+        for(int r = 0; r<d; r++){
+            for(int c = 0; c<d; c++){
+                res_arr[r][c] = arr[r][c];
+            }
+        }
+        res.setBoard(res_arr);
+        res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
+        res.setBlackPosList(deepListSet(b.getBlackPosList()));
+        // res.setWhitePosList(b.getWhitePosList());
+        // res.setBlackPosList(b.getBlackPosList());
+        res.setBlackTurn(b.isBlackTurn());
+        res.setUtilValue(b.getUtilValue());
+        res.silentDrawBoard();
+        return res;
     }
     
 }

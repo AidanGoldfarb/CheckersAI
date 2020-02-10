@@ -1505,5 +1505,8 @@ public class Board {
     public ArrayList<ArrayList<String>> getLegalMoves(){
         return moves;
     }
+    public void clearMoves(){
+        moves.clear();
+    }
     
 }

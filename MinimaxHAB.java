@@ -1,14 +1,17 @@
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Arrays;
-public class MinimaxH{
+public class MinimaxHAB{
 
 	private int depth;
 	private HashSet<String> visited;
+	private int alpha,beta;
 	private final int CUTOFF;
 
-	public MinimaxH(int cutoff){
+	public MinimaxHAB(int cutoff){
 		depth = 0;
+		alpha = Integer.MIN_VALUE;
+		beta = Integer.MAX_VALUE;
 		visited = new HashSet<String>();
 		CUTOFF = cutoff; 
 	}
@@ -20,21 +23,21 @@ public class MinimaxH{
 		}
 		Board bestAction = actions.get(0);
 		for(int i = 0; i<actions.size(); i++){
-			int minValue = min_value(actions.get(i));
+			int minValue = min_value(actions.get(i),alpha,beta);
+			//System.out.println("minValue: " + minValue);
 			depth = 0; //reset depth
 			if(bestAction.getUtilValue() < minValue){
 				bestAction = actions.get(i);
 			}
-			//visited.clear();
+			//visited.clear(); //submitted file has this uncommented on all minimax files
 		}
+		//System.out.println("returning best action w util val: " + bestAction.getUtilValue());
 		visited.clear();
 		return bestAction;
 	}
 
-	public int max_value(Board b){
+	public int max_value(Board b, int alpha, int beta){
 		if(depth == CUTOFF){
-			//System.out.println("min: ret terminal state with util value: " + utility_value(b)); 
-			//b.drawBoard();
 			return end_hueristic(b);
 		}
 		int v = Integer.MIN_VALUE;
@@ -43,23 +46,18 @@ public class MinimaxH{
 		for(int i = 0; i<actions.size(); i++){
 			if(!visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){//actions.get(i) not seen before
 				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
-				v = Math.max(v, min_value(actions.get(i)));
-				//if(v>Integer.MIN_VALUE && v<Integer.MAX_VALUE){//not +/- infinity{
-					//actions.get(i).setUtilValue(v);
-					//System.out.println("max: Setting util val to " + v);
-				//}
-			}
-			else{
-				actions.get(i).setUtilValue(0);
+				v = Math.max(v, min_value(actions.get(i),alpha,beta));
+				if(v>=beta){
+					return v;
+				}
+				alpha = Math.max(alpha,v);
 			}
 		}
 		return v;
 	}
 
-	public int min_value(Board b){
+	public int min_value(Board b, int alpha, int beta){
 		if(depth == CUTOFF){
-			//System.out.println("min: ret terminal state with util value: " + utility_value(b));
-			//b.drawBoard();
 			return end_hueristic(b);
 		}
 		int v = Integer.MAX_VALUE;
@@ -68,14 +66,11 @@ public class MinimaxH{
 		for(int i = 0; i<actions.size(); i++){
 			if(!visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){
 				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
-				v = Math.min(v, max_value(actions.get(i)));
-				//if(v>Integer.MIN_VALUE && v<Integer.MAX_VALUE){//not +/- infinity{
-					//actions.get(i).setUtilValue(v);
-					//System.out.println("min: Setting util val to " + v);
-				//}
-			}
-			else{
-				actions.get(i).setUtilValue(0);
+				v = Math.min(v, max_value(actions.get(i),alpha,beta));
+				if(v<=alpha){
+					return v;
+				}
+				beta = Math.min(beta,v);
 			}
 		}
 		return v;
@@ -156,3 +151,4 @@ public class MinimaxH{
     }
 
 }
+
