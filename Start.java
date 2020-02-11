@@ -137,6 +137,8 @@ public class Start {
                 }
                 else{
                     if(b1.isBlackTurn()){
+                        b1.getChildren();
+                        System.out.println("Legal moves: " + clean(b1.getLegalMoves()));
                         System.out.print("Enter a move, 'quit' to quit: ");
                         m = sc.next();
                         if(m.equals("quit")) System.exit(0);
@@ -202,6 +204,8 @@ public class Start {
             }
             else{
                 if(b1.isBlackTurn()){
+                    b1.getChildren();
+                    System.out.println("Legal moves: " + clean(b1.getLegalMoves()));
                     System.out.print("Enter a move: ");
                     m = sc.next();
                     if(m.equals("quit")) System.exit(0);
@@ -258,6 +262,8 @@ public class Start {
             }
             else{
                 if(b1.isBlackTurn()){
+                    b1.getChildren();
+                    System.out.println("Legal moves: " + clean(b1.getLegalMoves()));
                     System.out.print("Enter a move: ");
                     m = sc.next();
                     if(m.equals("quit")) System.exit(0);
@@ -305,6 +311,8 @@ public class Start {
                 System.exit(0);
             }
             else{
+                b1.getChildren();
+                System.out.println("Legal moves: " + clean(b1.getLegalMoves()));
                 System.out.print("Enter a move: ");
                 m = sc.next();
                 if(m.equals("quit")) System.exit(0);
@@ -373,6 +381,27 @@ public class Start {
             }
         }
         return false;
+    }
+    public static ArrayList<ArrayList<String>> clean(ArrayList<ArrayList<String>> list){
+        boolean capture = false;
+        for(int i = 0; i<list.size(); i++){
+            for(int j = 0; j<list.get(i).size(); j++){
+                if(list.get(i).get(j).contains("x")){
+                    //System.out.println("Capture is true ObjLongConsumer: " + list.get(i).get(j));
+                    capture = true;
+                }
+            }
+        }
+        if(capture){
+            for(int i = 0; i<list.size(); i++){
+                for(int j = 0; j<list.get(i).size(); j++){
+                    if(list.get(i).get(j).contains("-")){
+                        list.get(i).remove(j);
+                    }
+                }
+            }
+        }
+        return list;
     }
     public static Board deepCopy(Board b){
         int d = b.getDIM();

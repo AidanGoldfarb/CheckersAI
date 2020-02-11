@@ -139,8 +139,6 @@ public class MinimaxH{
         res.setBoard(res_arr);
         res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
         res.setBlackPosList(deepListSet(b.getBlackPosList()));
-        // res.setWhitePosList(b.getWhitePosList());
-        // res.setBlackPosList(b.getBlackPosList());
         res.setUtilValue(b.getUtilValue());
         res.setBlackTurn(b.isBlackTurn());
         res.silentDrawBoard();
