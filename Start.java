@@ -18,7 +18,7 @@ public class Start {
             pvp();
         }
         else if(input == 1){
-            System.out.print("0: Minimax(will run out of memory)  |  1: MinimaxH  |  2: MinimaxH-AB: ");
+            System.out.print("0: Minimax(will run out of memory if 8x8)  |  1: MinimaxH  |  2: MinimaxH-AB: ");
             int s = sc.nextInt();
             if(s == 0){
                 pvc();
