@@ -28,7 +28,6 @@ public class MinimaxHAB{
 			if(bestAction.getUtilValue() < minValue){
 				bestAction = actions.get(i);
 			}
-			//visited.clear(); //submitted file has this uncommented on all minimax files
 		}
 		visited.clear();
 		return bestAction;
@@ -96,6 +95,7 @@ public class MinimaxHAB{
 					}
 				}
 			}
+			sum = -sum;
 		}
 		return sum;
 	}

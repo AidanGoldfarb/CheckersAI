@@ -103,6 +103,7 @@ public class MinimaxH{
 					}
 				}
 			}
+			sum = -sum;
 		}
 		return sum;
 	}

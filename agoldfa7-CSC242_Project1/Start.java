@@ -360,7 +360,7 @@ public class Start {
         for(int i = 0; i<list.size(); i++){
             for(int j = 0; j<list.get(i).size(); j++){
                 if(list.get(i).get(j).contains("x")){
-                    System.out.println("Capture is true ObjLongConsumer: " + list.get(i).get(j));
+                    //System.out.println("Capture is true ObjLongConsumer: " + list.get(i).get(j));
                     capture = true;
                 }
             }
@@ -387,8 +387,6 @@ public class Start {
         res.setBoard(res_arr);
         res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
         res.setBlackPosList(deepListSet(b.getBlackPosList()));
-        // res.setWhitePosList(b.getWhitePosList());
-        // res.setBlackPosList(b.getBlackPosList());
         res.setBlackTurn(b.isBlackTurn());
         res.setUtilValue(b.getUtilValue());
         res.silentDrawBoard();
