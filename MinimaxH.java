@@ -25,7 +25,6 @@ public class MinimaxH{
 			if(bestAction.getUtilValue() < minValue){
 				bestAction = actions.get(i);
 			}
-			//visited.clear();
 		}
 		visited.clear();
 		return bestAction;
@@ -33,8 +32,6 @@ public class MinimaxH{
 
 	public int max_value(Board b){
 		if(depth == CUTOFF){
-			//System.out.println("min: ret terminal state with util value: " + utility_value(b)); 
-			//b.drawBoard();
 			return end_hueristic(b);
 		}
 		int v = Integer.MIN_VALUE;
@@ -44,10 +41,6 @@ public class MinimaxH{
 			if(!visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){//actions.get(i) not seen before
 				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
 				v = Math.max(v, min_value(actions.get(i)));
-				//if(v>Integer.MIN_VALUE && v<Integer.MAX_VALUE){//not +/- infinity{
-					//actions.get(i).setUtilValue(v);
-					//System.out.println("max: Setting util val to " + v);
-				//}
 			}
 			else{
 				actions.get(i).setUtilValue(0);
@@ -58,8 +51,6 @@ public class MinimaxH{
 
 	public int min_value(Board b){
 		if(depth == CUTOFF){
-			//System.out.println("min: ret terminal state with util value: " + utility_value(b));
-			//b.drawBoard();
 			return end_hueristic(b);
 		}
 		int v = Integer.MAX_VALUE;
@@ -95,7 +86,7 @@ public class MinimaxH{
 				}
 			}
 		}
-		else{
+		else{//white turn
 			for(int r = 0; r<b.getDIM(); r++){
 				for(int c = 0; c<b.getDIM(); c++){
 					if(b.isOccupied(r,c) && b.getPiece(new Point(r,c)).getSide().equals("white")){

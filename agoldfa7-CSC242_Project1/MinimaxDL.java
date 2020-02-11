@@ -59,10 +59,6 @@ public class MinimaxDL{
 			if(!visited.contains(Arrays.deepToString(actions.get(i).getBoard()))){
 				visited.add(Arrays.deepToString(actions.get(i).getBoard()));
 				v = Math.min(v, max_value(actions.get(i)));
-				//if(v>Integer.MIN_VALUE && v<Integer.MAX_VALUE){//not +/- infinity{
-					//actions.get(i).setUtilValue(v);
-					//System.out.println("min: Setting util val to " + v);
-				//}
 			}
 			else{
 				actions.get(i).setUtilValue(0);
@@ -84,7 +80,7 @@ public class MinimaxDL{
 	}
 
 	public boolean isTerminal(Board b){
-		if(b.getWhitePosList().isEmpty()){// || depth == 500){
+		if(b.getWhitePosList().isEmpty()){
 			return true;
 		}
 		else if(b.getBlackPosList().isEmpty()){
@@ -114,8 +110,6 @@ public class MinimaxDL{
         res.setBoard(res_arr);
         res.setWhitePosList(deepListSet(b.getWhitePosList())); //uncommenting deepList set causes getChildren to work 
         res.setBlackPosList(deepListSet(b.getBlackPosList()));
-        // res.setWhitePosList(b.getWhitePosList());
-        // res.setBlackPosList(b.getBlackPosList());
         res.setUtilValue(b.getUtilValue());
         res.setBlackTurn(b.isBlackTurn());
         res.silentDrawBoard();

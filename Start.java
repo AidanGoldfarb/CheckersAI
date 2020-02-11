@@ -119,7 +119,7 @@ public class Start {
         String m = "";
         int move = 1;
         while(!m.equals("quit")){
-            if(move<7 && !b1.getWhitePosList().isEmpty() && !b1.getBlackPosList().isEmpty()){
+            if(move<10){ //!b1.getWhitePosList().isEmpty() && !b1.getBlackPosList().isEmpty() && 
                 if(b1.getWhitePosList().isEmpty()){
                     System.out.println("Black wins!");
                     System.exit(0);
